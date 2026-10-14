@@ -1872,11 +1872,18 @@ select.form-select option {
 }
 
 .user-avatar-initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--va-mono);
   font-size: 0.95rem;
   font-weight: 700;
   text-transform: uppercase;
   line-height: 1;
+}
+
+.user-avatar-initial:not(:has(svg)) {
+  transform: translateY(0.5px);
 }
 
 /* Kasutaja profiili modaal */

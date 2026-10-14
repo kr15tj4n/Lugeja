@@ -3,7 +3,7 @@
  * Tagab PWA funktsionaalsuse, välkkiire laadimise ja võrguühenduseta (offline) toe.
  */
 
-const CACHE_NAME = 'lugeja-shell-v15';
+const CACHE_NAME = 'lugeja-shell-v16';
 const DATA_CACHE_NAME = 'lugeja-data';
 
 const PRECACHE_ASSETS = [
@@ -48,6 +48,20 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function getCleanApiRequest(request) {
+  const url = new URL(request.url);
+  if (url.searchParams.has('_t')) {
+    url.searchParams.delete('_t');
+    return new Request(url.toString(), {
+      method: request.method,
+      headers: request.headers,
+      mode: request.mode,
+      credentials: request.credentials
+    });
+  }
+  return request;
+}
+
 // Päringute vahendamine (Fetch)
 self.addEventListener('fetch', (event) => {
   const req = event.request;
@@ -55,6 +69,12 @@ self.addEventListener('fetch', (event) => {
 
   // Ainult GET päringuid saab vahemälust teenindada
   if (req.method !== 'GET') {
+    return;
+  }
+
+  // Kui päring on välisele domeenile (uudiste pisipildid, välised serverid),
+  // lase brauseril see otse ilma Service Workerita laadida.
+  if (url.origin !== self.location.origin) {
     return;
   }
 
@@ -66,6 +86,8 @@ self.addEventListener('fetch', (event) => {
       return;
     }
 
+    const cacheReq = getCleanApiRequest(req);
+
     event.respondWith(
       fetch(new Request(req, { cache: 'no-store' }))
         .then((response) => {
@@ -73,14 +95,14 @@ self.addEventListener('fetch', (event) => {
           if (response && response.status === 200) {
             const copy = response.clone();
             caches.open(DATA_CACHE_NAME).then((cache) => {
-              cache.put(req, copy);
+              cache.put(cacheReq, copy);
             });
           }
           return response;
         })
         .catch(() => {
           // Võrguviga või offline: püüa leida viimane salvestatud vastus
-          return caches.match(req).then((cached) => {
+          return caches.match(cacheReq).then((cached) => {
             if (cached) {
               return cached;
             }
@@ -140,7 +162,11 @@ self.addEventListener('fetch', (event) => {
           return cached;
         });
 
-      return cached || fetchPromise;
+      if (cached) {
+        event.waitUntil(fetchPromise);
+        return cached;
+      }
+      return fetchPromise;
     })
   );
 });

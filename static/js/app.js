@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnOpenDeleteAccountModal = document.getElementById('btnOpenDeleteAccountModal');
 
   // Kasutaja statistika elemendid
-  const statAccountAge = document.getElementById('statAccountAge');
   const statOpenedCount = document.getElementById('statOpenedCount');
   const statOpenedRate = document.getElementById('statOpenedRate');
   const statScrolledReadCount = document.getElementById('statScrolledReadCount');
@@ -281,7 +280,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function sanitizeImageUrl(url) {
     if (!url || typeof url !== 'string') return '';
-    const clean = url.trim();
+    let clean = url.trim();
+    if (clean.startsWith('//')) {
+      clean = (typeof window !== 'undefined' ? window.location.protocol : 'https:') + clean;
+    } else if (typeof window !== 'undefined' && window.location.protocol === 'https:' && clean.startsWith('http://')) {
+      clean = 'https://' + clean.slice(7);
+    }
     if (/^https?:\/\//i.test(clean) || /^data:image\/(?:png|jpeg|jpg|gif|webp);base64,/i.test(clean)) {
       return clean;
     }
@@ -1427,7 +1431,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           ${hasThumb ? `
             <a class="article-thumb-link" href="${escapeHtml(safeArtUrl)}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true" title="${escapeHtml(art.title)}">
-              <img class="article-thumb" src="${escapeHtml(safeImgUrl)}" alt="" loading="lazy" decoding="async" onerror="this.closest('.article-thumb-link').style.display='none'">
+              <img class="article-thumb" src="${escapeHtml(safeImgUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.article-thumb-link').style.display='none'">
             </a>
           ` : ''}
         `;
@@ -3228,17 +3232,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const stats = await res.json();
       if (!stats) return;
 
-      // 1. Konto vanus
-      if (statAccountAge) {
-        statAccountAge.textContent = stats.account_age_text || '-';
+      // 1. Tellitud allikad
+      if (statSourcesCount) {
+        statSourcesCount.textContent = Number(stats.sources_count || 0).toLocaleString('et-EE');
       }
 
-      // 2. Loetud uudised (avatud lood) ja lugemise määr (%)
-      if (statOpenedCount) {
-        statOpenedCount.textContent = Number(stats.opened_count || 0).toLocaleString('et-EE');
-      }
-      if (statOpenedRate) {
-        statOpenedRate.textContent = `${stats.read_rate_percent || 0}%`;
+      // 2. Kategooriad
+      if (statCategoriesCount) {
+        statCategoriesCount.textContent = Number(stats.categories_count || 0).toLocaleString('et-EE');
       }
 
       // 3. Läbi sirvitud (voos loetuks märgitud / mööda keritud)
@@ -3246,9 +3247,12 @@ document.addEventListener('DOMContentLoaded', () => {
         statScrolledReadCount.textContent = Number(stats.scrolled_read_count || 0).toLocaleString('et-EE');
       }
 
-      // 4. Tellitud allikad
-      if (statSourcesCount) {
-        statSourcesCount.textContent = Number(stats.sources_count || 0).toLocaleString('et-EE');
+      // 4. Loetud uudised (avatud lood) ja lugemise määr (%)
+      if (statOpenedCount) {
+        statOpenedCount.textContent = Number(stats.opened_count || 0).toLocaleString('et-EE');
+      }
+      if (statOpenedRate) {
+        statOpenedRate.textContent = `${stats.read_rate_percent || 0}%`;
       }
 
       // 5. Aktiivseim allikas (ei näita arvu sulgudes)

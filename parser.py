@@ -78,6 +78,8 @@ def sanitize_article_url(link: str, base_url: str = '') -> str:
     if not link or not isinstance(link, str):
         return ''
     clean = link.strip()
+    if clean.startswith('//'):
+        clean = 'https:' + clean
     if base_url:
         clean = urljoin(base_url, clean)
     try:
@@ -100,6 +102,8 @@ def sanitize_image_url(link: str, base_url: str = '') -> str:
         if re.match(r'^data:image/(?:png|jpeg|jpg|gif|webp);base64,', clean, re.IGNORECASE):
             return clean
         return ''
+    if clean.startswith('//'):
+        clean = 'https:' + clean
     if base_url:
         clean = urljoin(base_url, clean)
     try:
@@ -251,6 +255,12 @@ def extract_image_from_entry(entry):
 
     if content_html:
         soup = BeautifulSoup(content_html, 'html.parser')
+        og_img = soup.find('meta', property=lambda p: p and p.lower() in ('og:image', 'twitter:image'))
+        if not og_img:
+            og_img = soup.find('meta', attrs={'name': lambda n: n and n.lower() in ('og:image', 'twitter:image')})
+        if og_img and og_img.get('content'):
+            return og_img.get('content').strip()
+
         for img in soup.find_all('img'):
             src = img.get('src') or img.get('data-src') or img.get('data-original')
             if src:

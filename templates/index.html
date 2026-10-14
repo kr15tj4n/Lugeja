@@ -15,7 +15,8 @@
   
   <!-- Progressive Web App (PWA) manifest ja metatagid -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#111613">
+  <meta name="theme-color" content="#121316">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -67,20 +68,20 @@
         </svg>
       </button>
 
-      <button class="btn btn-secondary btn-icon-only" id="btnToggleRead" title="Kuva ka loetud uudised">
+      <button class="btn btn-secondary btn-icon-only" id="btnToggleRead" title="Kuva ka loetud uudised" aria-label="Kuva ka loetud uudised">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
           <circle cx="12" cy="12" r="3"></circle>
         </svg>
       </button>
 
-      <button class="btn btn-secondary btn-icon-only" id="btnMarkAllRead" title="Märgi kõik kuvatavad lood loetuks">
+      <button class="btn btn-secondary btn-icon-only" id="btnMarkAllRead" title="Märgi kõik kuvatavad lood loetuks" aria-label="Märgi kõik kuvatavad lood loetuks">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" class="icon-checkmark">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </button>
 
-      <button class="btn btn-secondary btn-icon-only" id="btnRefresh" title="Uuenda uudisvoogu kohe">
+      <button class="btn btn-secondary btn-icon-only" id="btnRefresh" title="Uuenda uudisvoogu kohe" aria-label="Uuenda uudisvoogu kohe">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
           id="refreshIcon">
           <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
@@ -88,9 +89,7 @@
       </button>
 
       <!-- Kasutajakonto ringikujuline nupp -->
-      <button class="btn btn-secondary btn-user-avatar" id="btnUserMenu" title="Kasutajakonto" aria-label="Kasutajakonto menüü">
-        <span class="user-avatar-initial" id="userAvatarInitial">{% if user_initial %}{{ user_initial }}{% else %}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>{% endif %}</span>
-      </button>
+      <button class="btn btn-secondary btn-user-avatar" id="btnUserMenu" title="Kasutajakonto" aria-label="Kasutajakonto menüü"><span class="user-avatar-initial" id="userAvatarInitial">{% if user_initial %}{{ user_initial }}{% else %}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>{% endif %}</span></button>
     </div>
   </header>
 
@@ -192,10 +191,10 @@
   </div>
 
   <!-- Uue allika lisamise modaal (Glassmorphism) -->
-  <div class="modal-backdrop" id="addSourceModal">
+  <div class="modal-backdrop" id="addSourceModal" role="dialog" aria-modal="true" aria-labelledby="addSourceModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Lisa uus allikas</h2>
+        <h2 class="modal-title" id="addSourceModalTitle">Lisa uus allikas</h2>
         <button class="modal-close" id="btnCloseAddSource" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -255,10 +254,10 @@
   </div>
 
   <!-- Allika muutmise modaal (Glassmorphism) -->
-  <div class="modal-backdrop" id="editSourceModal" aria-hidden="true">
+  <div class="modal-backdrop" id="editSourceModal" role="dialog" aria-modal="true" aria-labelledby="editSourceModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Muuda andmeallikat</h2>
+        <h2 class="modal-title" id="editSourceModalTitle">Muuda andmeallikat</h2>
         <button class="modal-close" id="btnCloseEditSource" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -309,10 +308,10 @@
   </div>
 
   <!-- Allika kustutamise kinnitusmodaal -->
-  <div class="modal-backdrop" id="deleteSourceModal" aria-hidden="true">
+  <div class="modal-backdrop" id="deleteSourceModal" role="dialog" aria-modal="true" aria-labelledby="deleteSourceModalTitle" aria-hidden="true">
     <div class="modal-content modal-dialog-confirm">
       <div class="modal-header">
-        <h2 class="modal-title">Kustuta andmeallikas</h2>
+        <h2 class="modal-title" id="deleteSourceModalTitle">Kustuta andmeallikas</h2>
         <button class="modal-close" id="btnCloseDeleteModal" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -349,10 +348,10 @@
   </div>
 
   <!-- Uue kategooria lisamise modaal (Glassmorphism) -->
-  <div class="modal-backdrop" id="addCategoryModal" aria-hidden="true">
+  <div class="modal-backdrop" id="addCategoryModal" role="dialog" aria-modal="true" aria-labelledby="addCategoryModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Lisa uus kategooria</h2>
+        <h2 class="modal-title" id="addCategoryModalTitle">Lisa uus kategooria</h2>
         <button class="modal-close" id="btnCloseAddCategory" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -387,10 +386,10 @@
   </div>
 
   <!-- Kategooria muutmise modaal -->
-  <div class="modal-backdrop" id="editCategoryModal" aria-hidden="true">
+  <div class="modal-backdrop" id="editCategoryModal" role="dialog" aria-modal="true" aria-labelledby="editCategoryModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title">Muuda kategooriat</h2>
+        <h2 class="modal-title" id="editCategoryModalTitle">Muuda kategooriat</h2>
         <button class="modal-close" id="btnCloseEditCategory" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -423,10 +422,10 @@
   </div>
 
   <!-- Kategooria kustutamise kinnitusmodaal -->
-  <div class="modal-backdrop" id="deleteCategoryModal" aria-hidden="true">
+  <div class="modal-backdrop" id="deleteCategoryModal" role="dialog" aria-modal="true" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
     <div class="modal-content modal-dialog-confirm">
       <div class="modal-header">
-        <h2 class="modal-title">Kustuta kategooria</h2>
+        <h2 class="modal-title" id="deleteCategoryModalTitle">Kustuta kategooria</h2>
         <button class="modal-close" id="btnCloseDeleteCategoryModal" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -462,10 +461,10 @@
   </div>
 
   <!-- Kasutaja profiili modaalaken (Glassmorphism) -->
-  <div class="modal-backdrop" id="userProfileModal" aria-hidden="true">
+  <div class="modal-backdrop" id="userProfileModal" role="dialog" aria-modal="true" aria-labelledby="userProfileModalTitle" aria-hidden="true">
     <div class="modal-content modal-user-profile">
       <div class="modal-header">
-        <h2 class="modal-title">Kasutajakonto</h2>
+        <h2 class="modal-title" id="userProfileModalTitle">Kasutajakonto</h2>
         <button class="modal-close" id="btnCloseUserProfileModal" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -508,34 +507,31 @@
             <span class="user-stats-section-title">Statistika</span>
           </div>
           <div class="user-stats-grid">
-            <!-- 1. Konto vanus -->
+            <!-- 1. Tellitud allikad -->
             <div class="user-stat-card">
               <div class="user-stat-icon">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
+                  <path d="M4 11a9 9 0 0 1 9 9"></path>
+                  <path d="M4 4a16 16 0 0 1 16 16"></path>
+                  <circle cx="5" cy="19" r="1"></circle>
                 </svg>
               </div>
               <div class="user-stat-info">
-                <span class="user-stat-label">Konto</span>
-                <span class="user-stat-value" id="statAccountAge">-</span>
+                <span class="user-stat-label">Tellitud</span>
+                <span class="user-stat-value" id="statSourcesCount">-</span>
               </div>
             </div>
 
-            <!-- 2. Loetud uudised (avatud lood) koos lugemise määraga (%) -->
+            <!-- 2. Kategooriad -->
             <div class="user-stat-card">
               <div class="user-stat-icon">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                 </svg>
               </div>
               <div class="user-stat-info">
-                <span class="user-stat-label">Loetud</span>
-                <div class="user-stat-value-group">
-                  <span class="user-stat-value" id="statOpenedCount">-</span>
-                  <span class="user-stat-sub" id="statOpenedRate">0%</span>
-                </div>
+                <span class="user-stat-label">Kat.</span>
+                <span class="user-stat-value" id="statCategoriesCount">-</span>
               </div>
             </div>
 
@@ -553,18 +549,20 @@
               </div>
             </div>
 
-            <!-- 4. Tellitud allikad -->
+            <!-- 4. Loetud uudised (avatud lood) koos lugemise määraga (%) -->
             <div class="user-stat-card">
               <div class="user-stat-icon">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 11a9 9 0 0 1 9 9"></path>
-                  <path d="M4 4a16 16 0 0 1 16 16"></path>
-                  <circle cx="5" cy="19" r="1"></circle>
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                 </svg>
               </div>
               <div class="user-stat-info">
-                <span class="user-stat-label">Tellitud</span>
-                <span class="user-stat-value" id="statSourcesCount">-</span>
+                <span class="user-stat-label">Loetud</span>
+                <div class="user-stat-value-group">
+                  <span class="user-stat-value" id="statOpenedCount">-</span>
+                  <span class="user-stat-sub" id="statOpenedRate">0%</span>
+                </div>
               </div>
             </div>
 
@@ -643,7 +641,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
               <span id="btnProfileImportOpmlText">Impordi</span>
             </button>
@@ -674,10 +672,10 @@
   </div>
 
   <!-- Kasutajakonto kustutamise kinnitusmodaal -->
-  <div class="modal-backdrop" id="deleteAccountModal" aria-hidden="true">
+  <div class="modal-backdrop" id="deleteAccountModal" role="dialog" aria-modal="true" aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
     <div class="modal-content modal-dialog-confirm">
       <div class="modal-header">
-        <h2 class="modal-title">Kustuta kasutajakonto</h2>
+        <h2 class="modal-title" id="deleteAccountModalTitle">Kustuta kasutajakonto</h2>
         <button class="modal-close" id="btnCloseDeleteAccountModal" aria-label="Sulge aken">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>

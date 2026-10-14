@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141B15" />
+      <stop offset="100%" stop-color="#0E120F" />
+    </linearGradient>
+    <linearGradient id="lugejaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#358D4D" />
+      <stop offset="100%" stop-color="#287440" />
+    </linearGradient>
+  </defs>
+
+  <!-- Täistaust maskable ohutsoonile -->
+  <rect width="512" height="512" fill="url(#bgGrad)" />
+
+  <!-- Lugeja logo maskable ohutsoonis (80% ring) ilma täpita -->
+  <g transform="translate(256, 256) scale(18) translate(-16, -16.32)">
+    <g fill="none" stroke="url(#lugejaGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 9C10 8 13.5 9 16 11V24C13.5 22 10 21 7 22Z" fill="rgba(53,141,77,0.22)" />
+      <path d="M25 9C22 8 18.5 9 16 11V24C18.5 22 22 21 25 22Z" fill="rgba(53,141,77,0.30)" />
+      <path d="M10 13H13.5" stroke="#358D4D" stroke-width="1.4" />
+      <path d="M10 16.5H13" stroke="#358D4D" stroke-width="1.4" />
+      <path d="M19 13H22" stroke="#358D4D" stroke-width="1.4" />
+      <path d="M19 16.5H21.5" stroke="#358D4D" stroke-width="1.4" />
+    </g>
+  </g>
+</svg>

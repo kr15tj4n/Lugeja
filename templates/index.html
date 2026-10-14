@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="et">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Lugeja - Uudisvood</title>
+  <meta name="description"
+    content="Kiire, kergekaaluline ja minimalistlik tume veebirakendus RSS voogude ja veebiuudiste lugemiseks.">
+
+  <!-- Favicon & PWA ikoonid -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+  
+  <!-- Progressive Web App (PWA) manifest ja metatagid -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#111613">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Lugeja">
+
+  <!-- Google Fonts: IBM Plex Sans & IBM Plex Mono (Aktsiaraamat.ee stiilis) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Stiilid -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <script>
+    window.INITIAL_RESET_TOKEN = {{ reset_token|tojson if reset_token else 'null' }};
+  </script>
+</head>
+
+<body class="{% if not user %}not-authenticated{% endif %} has-empty-feed">
+
+  <!-- Ühtne ülemine rida üle kogu lehe laiuse -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <button class="btn btn-secondary btn-icon-only" id="btnToggleSidebar" title="Peida külgriba"
+        aria-label="Peida või kuva menüü">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <a href="/" class="app-brand">
+        <img src="{{ url_for('static', filename='favicon.svg') }}" alt="Lugeja Logo" class="brand-logo">
+        <span class="brand-title">Lugeja</span>
+      </a>
+    </div>
+
+    <div class="top-bar-right">
+      <button class="btn btn-secondary btn-icon-only" id="btnInstallPwa" title="Paigalda rakendus" aria-label="Paigalda rakendus" style="display: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="13" rx="2"></rect>
+          <path d="M8 20h8"></path>
+          <path d="M12 16v4"></path>
+          <path d="M12 6v6"></path>
+          <path d="M9 9.5l3 3 3-3"></path>
+        </svg>
+      </button>
+
+      <button class="btn btn-secondary btn-icon-only" id="btnToggleRead" title="Kuva ka loetud uudised">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
+
+      <button class="btn btn-secondary btn-icon-only" id="btnMarkAllRead" title="Märgi kõik kuvatavad lood loetuks">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" class="icon-checkmark">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </button>
+
+      <button class="btn btn-secondary btn-icon-only" id="btnRefresh" title="Uuenda uudisvoogu kohe">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+          id="refreshIcon">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+        </svg>
+      </button>
+
+      <!-- Kasutajakonto ringikujuline nupp -->
+      <button class="btn btn-secondary btn-user-avatar" id="btnUserMenu" title="Kasutajakonto" aria-label="Kasutajakonto menüü">
+        <span class="user-avatar-initial" id="userAvatarInitial">{% if user_initial %}{{ user_initial }}{% else %}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>{% endif %}</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Külgriba (Sidebar) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section-title">
+        <span>Allikad</span>
+        <div class="dropdown-add-wrap" id="addDropdownWrap">
+          <button class="btn btn-primary btn-add-source" id="btnOpenAddDropdown" title="Lisa allikas või kategooria" aria-haspopup="true" aria-expanded="false">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Lisa</span>
+            <svg class="dropdown-arrow-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="dropdown-add-menu" id="addDropdownMenu">
+            <button type="button" class="dropdown-add-item" id="btnAddSourceChoice">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                <circle cx="5" cy="19" r="1"></circle>
+              </svg>
+              <span>Lisa uus allikas</span>
+            </button>
+            <button type="button" class="dropdown-add-item" id="btnAddCategoryChoice">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                <line x1="12" y1="11" x2="12" y2="17"></line>
+                <line x1="9" y1="14" x2="15" y2="14"></line>
+              </svg>
+              <span>Lisa uus kategooria</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Andmeallikate nimekiri koos Kõik allikad valikuga -->
+      <nav class="sidebar-nav">
+        <button class="nav-item active" id="navItemAll" data-filter="all" title="Kõik allikad">
+          <div class="nav-item-content">
+            <div class="nav-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                <circle cx="5" cy="19" r="1"></circle>
+              </svg>
+            </div>
+            <span class="nav-label" title="Kõik allikad">Kõik allikad</span>
+          </div>
+          <div class="nav-item-right">
+            <span class="nav-badge" id="totalUnreadBadge">0</span>
+          </div>
+        </button>
+
+        <button class="nav-item" id="navItemReadLater" data-filter="read_later" title="Loe hiljem">
+          <div class="nav-item-content">
+            <div class="nav-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <span class="nav-label" title="Loe hiljem">Loe hiljem</span>
+          </div>
+          <div class="nav-item-right">
+            <span class="nav-badge" id="readLaterBadge">0</span>
+          </div>
+        </button>
+
+        <div id="sourcesList" style="display:flex; flex-direction:column; gap:0.25rem;">
+          <!-- Allikad renderdatakse JavaScripti abil -->
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Mobiilivaate taustakate (Overlay) külgriba sulgemiseks ekraanile vajutades -->
+    <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+    <!-- Peamine sisu -->
+    <main class="main-content">
+
+      <!-- Uudiste voog -->
+      <section class="feed-container has-empty-state" id="feedContainer">
+        <!-- Artiklite grupid lisatakse JS-ga -->
+        <div class="empty-state">
+          <div class="loading-spinner-wrap" style="margin-bottom: 0.85rem;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite; color: var(--va-acc);">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+            </svg>
+          </div>
+          <div class="empty-title">Laadin uudisvoogu...</div>
+          <div class="empty-desc">Palun oota hetk, kuni loeme värskeid uudiseid.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Uue allika lisamise modaal (Glassmorphism) -->
+  <div class="modal-backdrop" id="addSourceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Lisa uus allikas</h2>
+        <button class="modal-close" id="btnCloseAddSource" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="addSourceForm" novalidate>
+        <div class="modal-body">
+          <div class="modal-error-banner" id="addSourceErrorBanner" style="display: none;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="sourceUrl">Allika URL või RSS voog *</label>
+            <input type="text" class="form-input" id="sourceUrl"
+              placeholder="nt https://postimees.ee või https://feeds.bbci.co.uk/..." autocomplete="off">
+            <div class="field-error-msg" id="sourceUrlError" style="display: none;"></div>
+            <div class="form-hint">
+              Kui lehel puudub ametlik RSS voog, tuvastab ja kraabib süsteem uudised automaatselt veebilehelt.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sourceName">Allika nimi (valikuline)</label>
+            <input type="text" class="form-input" id="sourceName" placeholder="Jäta tühjaks automaatseks tuvastamiseks"
+              autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sourceCategory">Kategooria (valikuline)</label>
+            <select class="form-input form-select" id="sourceCategory">
+              <option value="">-- Ilma kategooriata --</option>
+            </select>
+            <div class="form-hint">
+              Vali olemasolev kategooria või jäta tühjaks ilma kategooriata lisamiseks.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelAddSource">Loobu</button>
+          <button type="button" class="btn btn-secondary" id="btnAddSourceImportOpml" title="Impordi tellimused OPML failist">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Impordi OPML</span>
+          </button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitSource">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Lisa allikas
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Allika muutmise modaal (Glassmorphism) -->
+  <div class="modal-backdrop" id="editSourceModal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Muuda andmeallikat</h2>
+        <button class="modal-close" id="btnCloseEditSource" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="editSourceForm" novalidate>
+        <input type="hidden" id="editSourceId">
+        <div class="modal-body">
+          <div class="modal-error-banner" id="editSourceErrorBanner" style="display: none;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="editSourceName">Allika nimi *</label>
+            <input type="text" class="form-input" id="editSourceName" placeholder="nt ERR Uudised"
+              autocomplete="off">
+            <div class="field-error-msg" id="editSourceNameError" style="display: none;"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="editSourceUrl">Allika URL või RSS voog *</label>
+            <input type="text" class="form-input" id="editSourceUrl" placeholder="nt https://rss.err.ee/uudised"
+              autocomplete="off">
+            <div class="field-error-msg" id="editSourceUrlError" style="display: none;"></div>
+            <div class="form-hint">
+              Kui aadress muutub, kontrollib süsteem automaatselt RSS-voogu ja uuendab uudised.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="editSourceCategory">Kategooria (valikuline)</label>
+            <select class="form-input form-select" id="editSourceCategory">
+              <option value="">-- Ilma kategooriata --</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelEditSource">Loobu</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitEditSource">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Salvesta muudatused
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Allika kustutamise kinnitusmodaal -->
+  <div class="modal-backdrop" id="deleteSourceModal" aria-hidden="true">
+    <div class="modal-content modal-dialog-confirm">
+      <div class="modal-header">
+        <h2 class="modal-title">Kustuta andmeallikas</h2>
+        <button class="modal-close" id="btnCloseDeleteModal" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-icon-wrap">
+          <div class="confirm-danger-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <div class="confirm-content">
+            <p class="confirm-text">Kas soovid kindlasti allika <strong id="deleteSourceName"
+                class="confirm-highlight"></strong> eemaldada?</p>
+            <p class="confirm-subtext">Selle allikaga seotud uudised kustutatakse andmebaasist.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnCancelDeleteSource">Loobu</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDeleteSource">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Kustuta allikas
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Uue kategooria lisamise modaal (Glassmorphism) -->
+  <div class="modal-backdrop" id="addCategoryModal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Lisa uus kategooria</h2>
+        <button class="modal-close" id="btnCloseAddCategory" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="addCategoryForm" novalidate>
+        <div class="modal-body">
+          <div class="modal-error-banner" id="addCategoryErrorBanner" style="display: none;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="categoryName">Kategooria nimi *</label>
+            <input type="text" class="form-input" id="categoryName" placeholder="nt Uudised, Majandus, Tehnoloogia" autocomplete="off">
+            <div class="field-error-msg" id="categoryNameError" style="display: none;"></div>
+            <div class="form-hint">
+              Kategooria abil saad allikaid temaatiliselt grupeerida.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelAddCategory">Loobu</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitCategory">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Lisa kategooria
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kategooria muutmise modaal -->
+  <div class="modal-backdrop" id="editCategoryModal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Muuda kategooriat</h2>
+        <button class="modal-close" id="btnCloseEditCategory" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="editCategoryForm" novalidate>
+        <input type="hidden" id="editCategoryId">
+        <div class="modal-body">
+          <div class="modal-error-banner" id="editCategoryErrorBanner" style="display: none;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="editCategoryName">Kategooria nimi *</label>
+            <input type="text" class="form-input" id="editCategoryName" autocomplete="off">
+            <div class="field-error-msg" id="editCategoryNameError" style="display: none;"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelEditCategory">Loobu</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitEditCategory">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Salvesta muudatused
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kategooria kustutamise kinnitusmodaal -->
+  <div class="modal-backdrop" id="deleteCategoryModal" aria-hidden="true">
+    <div class="modal-content modal-dialog-confirm">
+      <div class="modal-header">
+        <h2 class="modal-title">Kustuta kategooria</h2>
+        <button class="modal-close" id="btnCloseDeleteCategoryModal" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-icon-wrap">
+          <div class="confirm-danger-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <div class="confirm-content">
+            <p class="confirm-text">Kas soovid kindlasti kustutada kategooria <strong id="deleteCategoryTargetName" class="confirm-highlight"></strong>?</p>
+            <p class="confirm-subtext">Selle kategooria allikad jäävad alles ilma kategooriata.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnCancelDeleteCategory">Loobu</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDeleteCategory">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Kustuta kategooria
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kasutaja profiili modaalaken (Glassmorphism) -->
+  <div class="modal-backdrop" id="userProfileModal" aria-hidden="true">
+    <div class="modal-content modal-user-profile">
+      <div class="modal-header">
+        <h2 class="modal-title">Kasutajakonto</h2>
+        <button class="modal-close" id="btnCloseUserProfileModal" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body user-profile-body">
+        <div class="user-profile-header">
+          <div class="user-profile-avatar-large">
+            <span id="userProfileAvatarInitial">{% if user_initial %}{{ user_initial }}{% else %}<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>{% endif %}</span>
+          </div>
+          <div class="user-profile-info">
+            <div class="user-profile-name-row">
+              <span class="user-profile-name" id="userProfileUsername">Kasutaja</span>
+              <span class="badge-role" id="userProfileRoleBadge">Kasutaja</span>
+            </div>
+            <span class="user-profile-created" id="userProfileCreated">Liitunud: -</span>
+            <div class="user-profile-email-row" id="userProfileEmailRow">
+              <span class="user-profile-email-label">E-post:</span>
+              <span class="user-profile-email-val" id="userProfileEmailVal">Määramata</span>
+              <button type="button" class="btn-profile-edit-email" id="btnOpenEditEmail" title="Muuda või lisa e-posti aadress" aria-label="Muuda e-posti">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+            </div>
+            <form class="user-profile-email-edit-form" id="profileEmailEditForm" style="display: none;" novalidate>
+              <input type="email" class="form-input form-input-sm" id="profileEmailInput" placeholder="sinu@email.ee" autocomplete="email">
+              <button type="submit" class="btn btn-primary btn-sm" id="btnSaveProfileEmail">Salvesta</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnCancelProfileEmail">Loobu</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Kasutaja statistika paneel -->
+        <div class="user-stats-section" id="userStatsSection">
+          <div class="user-stats-section-header">
+            <span class="user-stats-section-title">Statistika</span>
+          </div>
+          <div class="user-stats-grid">
+            <!-- 1. Konto vanus -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Konto</span>
+                <span class="user-stat-value" id="statAccountAge">-</span>
+              </div>
+            </div>
+
+            <!-- 2. Loetud uudised (avatud lood) koos lugemise määraga (%) -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Loetud</span>
+                <div class="user-stat-value-group">
+                  <span class="user-stat-value" id="statOpenedCount">-</span>
+                  <span class="user-stat-sub" id="statOpenedRate">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Läbi sirvitud (voos loetuks märgitud / mööda keritud) -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Sirvitud</span>
+                <span class="user-stat-value" id="statScrolledReadCount">-</span>
+              </div>
+            </div>
+
+            <!-- 4. Tellitud allikad -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 11a9 9 0 0 1 9 9"></path>
+                  <path d="M4 4a16 16 0 0 1 16 16"></path>
+                  <circle cx="5" cy="19" r="1"></circle>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Tellitud</span>
+                <span class="user-stat-value" id="statSourcesCount">-</span>
+              </div>
+            </div>
+
+            <!-- 5. Aktiivseim allikas -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Aktiivseim</span>
+                <div class="user-stat-source-row" id="statMostActiveSourceRow">
+                  <span class="user-stat-source-name" id="statMostActiveSourceName">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Loetuim allikas -->
+            <div class="user-stat-card">
+              <div class="user-stat-icon user-stat-icon-fav">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="user-stat-info">
+                <span class="user-stat-label">Loetuim</span>
+                <div class="user-stat-source-row" id="statFavoriteSourceRow">
+                  <span class="user-stat-source-name" id="statFavoriteSourceName">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seadmete kasutus (Mobiil vs Arvuti) graafiline riba -->
+          <div class="user-device-usage-card dominant-equal" id="userDeviceUsageCard">
+            <div class="user-device-usage-header">
+              <div class="device-stat-side device-stat-mobile" id="deviceStatMobile">
+                <svg class="device-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                  <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                </svg>
+                <span class="device-name">Mobiil</span>
+                <span class="device-percent" id="deviceMobilePercent">50%</span>
+              </div>
+              <div class="device-stat-side device-stat-desktop" id="deviceStatDesktop">
+                <span class="device-percent" id="deviceDesktopPercent">50%</span>
+                <span class="device-name">Arvuti</span>
+                <svg class="device-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+            </div>
+            <div class="user-device-bar-track" id="deviceBarTrack">
+              <div class="user-device-bar-segment segment-mobile" id="deviceBarSegmentMobile" style="width: 50%;"></div>
+              <div class="user-device-bar-segment segment-desktop" id="deviceBarSegmentDesktop" style="width: 50%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-menu-actions">
+          <!-- Tellimuste eksport, import, välja logimine ja konto kustutamine ühes reas -->
+          <div class="user-actions-row">
+            <a href="/api/export/opml" class="btn btn-secondary btn-user-action" id="btnProfileExportOpml" title="Ekspordi tellimused OPML failina" download="lugeja_tellimused.opml">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Ekspordi</span>
+            </a>
+
+            <button type="button" class="btn btn-secondary btn-user-action" id="btnProfileImportOpml" title="Impordi tellimused OPML failist">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span id="btnProfileImportOpmlText">Impordi</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary btn-user-action" id="btnLogout" title="Logi süsteemist välja">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Logi välja</span>
+            </button>
+
+            <!-- Kustuta (tavakonto puhul kuvatakse, admin-konto puhul puudub) -->
+            <button type="button" class="btn btn-danger btn-user-action" id="btnOpenDeleteAccountModal" title="Kustuta oma kasutajakonto"{% if user and user.is_admin %} style="display: none;"{% endif %}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              <span id="btnDeleteAccountText">Kustuta</span>
+            </button>
+          </div>
+          <input type="file" id="opmlFileInput" accept=".opml,.xml" style="display: none;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kasutajakonto kustutamise kinnitusmodaal -->
+  <div class="modal-backdrop" id="deleteAccountModal" aria-hidden="true">
+    <div class="modal-content modal-dialog-confirm">
+      <div class="modal-header">
+        <h2 class="modal-title">Kustuta kasutajakonto</h2>
+        <button class="modal-close" id="btnCloseDeleteAccountModal" aria-label="Sulge aken">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-icon-wrap">
+          <div class="confirm-danger-badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <div class="confirm-content">
+            <p class="confirm-text">Kas oled kindel, et soovid oma konto <strong id="deleteAccountUsername" class="confirm-highlight"></strong> kustutada?</p>
+            <p class="confirm-subtext">Kustutatakse kõik sinu lisatud allikad, kategooriad, loetud uudiste ajalugu ja "Loe hiljem" nimekirjad. Seda toimingut ei saa tagasi võtta.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnCancelDeleteAccount">Loobu</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDeleteAccount">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Kustuta minu konto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Autentimise täisekraani kiht (Sisselogimine / Registreerimine) -->
+  <div class="auth-overlay" id="authOverlay" style="{% if not user %}display: flex;{% else %}display: none;{% endif %}">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <img src="{{ url_for('static', filename='favicon.svg') }}" alt="Lugeja Logo" class="auth-logo">
+        <h1 class="auth-title">Lugeja</h1>
+      </div>
+
+      <!-- Sakid: Sisselogimine ja Registreerimine -->
+      <div class="auth-tabs" id="authTabs">
+        <button type="button" class="auth-tab {% if has_users %}active{% endif %}" id="tabLogin">Logi sisse</button>
+        <button type="button" class="auth-tab {% if not has_users %}active{% endif %}" id="tabRegister">Loo konto</button>
+      </div>
+
+      <!-- Teated -->
+      <div class="auth-error-banner" id="authErrorBanner" style="display: none;"></div>
+      <div class="auth-success-banner" id="authSuccessBanner" style="display: none;"></div>
+
+      <!-- Sisselogimise vorm -->
+      <form class="auth-form" id="loginForm" novalidate style="{% if not has_users %}display: none;{% endif %}">
+        <div class="form-group">
+          <label class="form-label" for="loginUsername">Kasutajanimi</label>
+          <input type="text" class="form-input" id="loginUsername" placeholder="Sisesta kasutajanimi" autocomplete="username">
+          <div class="field-error-msg" id="loginUsernameError" style="display: none;"></div>
+        </div>
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label" for="loginPassword">Salasõna</label>
+            <button type="button" class="btn-auth-link" id="btnForgotPassword">Unustasin parooli?</button>
+          </div>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Sisesta salasõna" autocomplete="current-password">
+          <div class="field-error-msg" id="loginPasswordError" style="display: none;"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth-submit" id="btnSubmitLogin">
+          <span>Logi sisse</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Registreerimise vorm -->
+      <form class="auth-form" id="registerForm" style="{% if has_users %}display: none;{% endif %}" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="regUsername">Kasutajanimi *</label>
+          <input type="text" class="form-input" id="regUsername" placeholder="Vali kasutajanimi (min 3 märki)" autocomplete="username">
+          <div class="field-error-msg" id="regUsernameError" style="display: none;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regEmail">E-posti aadress (parooli taastamiseks)</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="sinu@email.ee" autocomplete="email">
+          <div class="field-error-msg" id="regEmailError" style="display: none;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Salasõna *</label>
+          <input type="password" class="form-input" id="regPassword" placeholder="Vali salasõna (min 8 märki)" autocomplete="new-password">
+          <div class="field-error-msg" id="regPasswordError" style="display: none;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPasswordConfirm">Korda salasõna *</label>
+          <input type="password" class="form-input" id="regPasswordConfirm" placeholder="Korda sama salasõna" autocomplete="new-password">
+          <div class="field-error-msg" id="regPasswordConfirmError" style="display: none;"></div>
+        </div>
+        <div class="auth-admin-hint" id="authAdminHint" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>Esimene registreeritud konto saab automaatselt administraatoriks (admin), kelle kontot ei saa kustutada.</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth-submit" id="btnSubmitRegister">
+          <span>Loo kasutajakonto</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Parooli taastamise taotlemise vorm -->
+      <form class="auth-form" id="forgotPasswordForm" style="display: none;" novalidate>
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Parooli taastamine</h2>
+          <p class="auth-form-desc">Sisesta oma kasutajanimi või e-posti aadress. Saadame sulle lingi uue parooli määramiseks.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="forgotIdentifier">Kasutajanimi või e-post</label>
+          <input type="text" class="form-input" id="forgotIdentifier" placeholder="Sisesta kasutajanimi või e-post" autocomplete="username">
+          <div class="field-error-msg" id="forgotIdentifierError" style="display: none;"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth-submit" id="btnSubmitForgot">
+          <span>Saada taastamislink</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+        <div class="auth-form-footer">
+          <button type="button" class="btn-auth-back-link" id="btnBackToLoginFromForgot">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Tagasi sisselogimise juurde</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Uue parooli määramise vorm -->
+      <form class="auth-form" id="resetPasswordForm" style="display: none;" novalidate>
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Uue parooli määramine</h2>
+          <p class="auth-form-desc">Sisesta oma uus salasõna (vähemalt 8 tähemärki).</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="resetNewPassword">Uus salasõna *</label>
+          <input type="password" class="form-input" id="resetNewPassword" placeholder="Vali uus salasõna (min 8 märki)" autocomplete="new-password">
+          <div class="field-error-msg" id="resetNewPasswordError" style="display: none;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="resetNewPasswordConfirm">Korda uut salasõna *</label>
+          <input type="password" class="form-input" id="resetNewPasswordConfirm" placeholder="Korda sama salasõna" autocomplete="new-password">
+          <div class="field-error-msg" id="resetNewPasswordConfirmError" style="display: none;"></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-auth-submit" id="btnSubmitReset">
+          <span>Salvesta uus parool</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+        <div class="auth-form-footer">
+          <button type="button" class="btn-auth-back-link" id="btnBackToLoginFromReset">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Tagasi sisselogimise juurde</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tagasi üles nupp (Scroll to top) -->
+  <button type="button" class="btn-scroll-top" id="btnScrollTop" title="Algusesse tagasi" aria-label="Keri algusesse tagasi">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+  </button>
+
+  <!-- Teavituste konteiner -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Rakenduse skript -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

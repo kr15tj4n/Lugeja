@@ -4,6 +4,7 @@ Lugeja - RSS ja Veebiuudiste parser ning kraapija
 
 import re
 import datetime
+from zoneinfo import ZoneInfo
 import calendar
 import socket
 import ipaddress
@@ -11,6 +12,8 @@ from urllib.parse import urljoin, urlparse
 import requests
 import feedparser
 from bs4 import BeautifulSoup
+
+TALLINN_TZ = ZoneInfo("Europe/Tallinn")
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -167,10 +170,13 @@ def clean_text(text):
 
 def parse_published_time(entry, default_now=None):
     """
-    Teisendab feedparseri UTC ajatempli kohaliku ajatsooni kuupäevaks ja kellaajaks (YYYY-MM-DD HH:MM:SS).
+    Teisendab feedparseri UTC ajatempli Eesti kohaliku ajavööndi (Europe/Tallinn)
+    kuupäevaks ja kellaajaks (YYYY-MM-DD HH:MM:SS).
     """
     if default_now is None:
-        default_now = datetime.datetime.now()
+        default_now = datetime.datetime.now(TALLINN_TZ)
+    elif not hasattr(default_now, 'tzinfo') or default_now.tzinfo is None:
+        default_now = default_now.replace(tzinfo=TALLINN_TZ)
 
     time_tuple = None
     if hasattr(entry, 'published_parsed') and entry.published_parsed:
@@ -181,15 +187,30 @@ def parse_published_time(entry, default_now=None):
     if time_tuple:
         try:
             # feedparseri time_tuple on ALATI UTC ajas.
-            # calendar.timegm teeb sellest korrektse UTC timestampi,
-            # ja datetime.fromtimestamp konverteerib selle kohalikuks ajaks.
+            # calendar.timegm teeb sellest UTC timestampi,
+            # ja .astimezone(TALLINN_TZ) tagab korrektse Eesti kohaliku aja (nii suve- kui talveajal).
             utc_timestamp = calendar.timegm(time_tuple)
-            local_dt = datetime.datetime.fromtimestamp(utc_timestamp)
+            local_dt = datetime.datetime.fromtimestamp(utc_timestamp, tz=datetime.timezone.utc).astimezone(TALLINN_TZ)
             return local_dt.strftime("%Y-%m-%d %H:%M:%S")
         except Exception:
             pass
 
-    return default_now.strftime("%Y-%m-%d %H:%M:%S")
+    # Kui feedparseri time_tuple puudus, proovime parsimist toorest stringist
+    if isinstance(entry, dict) or hasattr(entry, 'get'):
+        for key in ('published', 'updated', 'created', 'pubDate'):
+            raw_val = entry.get(key)
+            if raw_val and isinstance(raw_val, str):
+                try:
+                    clean_raw = raw_val.strip()
+                    if 'T' in clean_raw:
+                        dt = datetime.datetime.fromisoformat(clean_raw)
+                        if dt.tzinfo is None:
+                            dt = dt.replace(tzinfo=TALLINN_TZ)
+                        return dt.astimezone(TALLINN_TZ).strftime("%Y-%m-%d %H:%M:%S")
+                except Exception:
+                    pass
+
+    return default_now.astimezone(TALLINN_TZ).strftime("%Y-%m-%d %H:%M:%S")
 
 def extract_image_from_entry(entry):
     """
@@ -407,7 +428,7 @@ def scrape_articles_from_html(soup, base_url):
     """
     articles = []
     seen_urls = set()
-    now_dt = datetime.datetime.now()
+    now_dt = datetime.datetime.now(TALLINN_TZ)
 
     domain = urlparse(base_url).netloc.lower()
 

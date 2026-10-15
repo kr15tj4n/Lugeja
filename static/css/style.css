@@ -277,6 +277,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.6rem 0.75rem;
   border-radius: 9px;
   color: var(--va-t1);
@@ -305,7 +306,7 @@ body {
 .nav-item-content {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.45rem;
   min-width: 0;
   flex: 1;
 }
@@ -345,13 +346,13 @@ body {
 }
 
 .source-logo-container {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: var(--va-acc-soft);
-  border: 1px solid rgba(53, 141, 77, 0.25);
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   color: var(--va-acc);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -361,10 +362,67 @@ body {
   stroke: var(--va-acc);
 }
 
+.nav-label-wrap {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
 .nav-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.nav-label-wrap.is-scrolling {
+  mask-image: linear-gradient(
+    to right,
+    black 0%,
+    black calc(100% - 10px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black 0%,
+    black calc(100% - 10px),
+    transparent 100%
+  );
+}
+
+.nav-label-wrap.is-scrolling .nav-label {
+  display: inline-block;
+  overflow: visible;
+  text-overflow: clip;
+  width: max-content;
+  max-width: none;
+  animation: navSourceMarquee var(--marquee-duration, 6s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.nav-item:hover .nav-label-wrap.is-scrolling .nav-label {
+  animation-play-state: paused;
+}
+
+@keyframes navSourceMarquee {
+  0%, 25% {
+    transform: translateX(0);
+  }
+  75%, 100% {
+    transform: translateX(var(--marquee-distance, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-label-wrap.is-scrolling .nav-label {
+    animation: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+    display: block;
+  }
 }
 
 .nav-badge {
@@ -473,6 +531,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.45rem;
   padding: 0.45rem 0.5rem 0.45rem 0.35rem;
   border-radius: 8px;
   color: var(--va-t1);
@@ -622,6 +681,7 @@ body {
 .nav-item.nav-item-sub {
   padding: 0.45rem 0.65rem;
   font-size: 0.84rem;
+  gap: 0.45rem;
 }
 
 .nav-item.nav-item-sub .nav-icon {
@@ -1130,23 +1190,13 @@ body {
 .source-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.source-logo {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: var(--va-surface);
-  border: 1px solid var(--va-line);
-  object-fit: cover;
-  flex-shrink: 0;
+  gap: 0.55rem;
 }
 
 .source-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--va-acc);
   letter-spacing: -0.01em;
 }
 

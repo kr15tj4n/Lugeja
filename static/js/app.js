@@ -297,7 +297,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   function formatDateTime(dateString) {
     if (!dateString) return '';
-    const date = new Date(dateString.replace(' ', 'T'));
+    const s = String(dateString).trim();
+    // Andmebaasis salvestatakse avaldamise aeg Eesti ajas (Europe/Tallinn) kujul "YYYY-MM-DD HH:MM:SS".
+    // Toetab ka murdsekundeid .123 ning T-eraldajat:
+    const match = s.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?$/);
+    if (match) {
+      const [, y, m, d, hh, mm] = match;
+      return `${d}.${m}.${y} ${hh}:${mm}`;
+    }
+    // Safari / WebKit vajab ISO stringis tühiku asemel 'T'-d:
+    const normalized = s.includes(' ') && !s.includes('T') ? s.replace(' ', 'T') : s;
+    const date = new Date(normalized);
     if (isNaN(date.getTime())) return dateString;
 
     const pad = (n) => String(n).padStart(2, '0');
@@ -686,6 +696,14 @@ document.addEventListener('DOMContentLoaded', () => {
       count++;
       sourceBadge.textContent = count;
       sourceBadge.classList.add('has-unread');
+      const navItem = sourceBadge.closest('.nav-item');
+      if (navItem) {
+        const wrapEl = navItem.querySelector('.nav-label-wrap');
+        const labelEl = navItem.querySelector('.nav-label');
+        if (wrapEl && labelEl) {
+          requestAnimationFrame(() => updateSourceNavMarquee(wrapEl, labelEl));
+        }
+      }
     }
 
     // Kategooria loendur, kui allikas kuulub kategooriasse
@@ -735,6 +753,14 @@ document.addEventListener('DOMContentLoaded', () => {
         sourceBadge.textContent = count;
         if (count === 0) {
           sourceBadge.classList.remove('has-unread');
+        }
+        const navItem = sourceBadge.closest('.nav-item');
+        if (navItem) {
+          const wrapEl = navItem.querySelector('.nav-label-wrap');
+          const labelEl = navItem.querySelector('.nav-label');
+          if (wrapEl && labelEl) {
+            requestAnimationFrame(() => updateSourceNavMarquee(wrapEl, labelEl));
+          }
         }
       }
     }
@@ -984,7 +1010,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <circle cx="5" cy="19" r="1"></circle>
           </svg>
         </div>
-        <span class="nav-label" title="${escapeHtml(src.name)}">${escapeHtml(src.name)}</span>
+        <div class="nav-label-wrap">
+          <span class="nav-label" title="${escapeHtml(src.name)}">${escapeHtml(src.name)}</span>
+        </div>
       </div>
       <div class="nav-item-right">
         <span class="nav-badge ${src.unread_count > 0 ? 'has-unread' : ''}" data-source-id="${src.id}">
@@ -1038,6 +1066,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     return btn;
+  }
+
+  function updateSourceNavMarquee(wrapEl, labelEl) {
+    if (!wrapEl || !labelEl) return;
+    const text = labelEl.textContent ? labelEl.textContent.trim() : '';
+    if (!text) {
+      if (wrapEl.classList.contains('is-scrolling')) {
+        wrapEl.classList.remove('is-scrolling');
+        wrapEl.style.removeProperty('--marquee-distance');
+        wrapEl.style.removeProperty('--marquee-duration');
+      }
+      return;
+    }
+
+    // Kui element pole hetkel nähtav (nt suletud kategoorias või kokkuklapitud menüüs)
+    const containerWidth = wrapEl.clientWidth;
+    if (containerWidth <= 0) return;
+
+    // Kuna .nav-label omab CSS-is overflow:hidden ja white-space:nowrap,
+    // annab labelEl.scrollWidth loomupäraselt teksti täislaiuse ilma DOM-i stiilimuutusteta!
+    const fullWidth = labelEl.scrollWidth;
+    const overflow = fullWidth - containerWidth;
+
+    if (overflow > 4) {
+      const distStr = `-${overflow}px`;
+      const durationStr = `${Math.max(6, (overflow / 20) + 4).toFixed(1)}s`;
+
+      // Värskendame muutujaid AINULT siis, kui vahemaa on tegelikult muutunud,
+      // vältides parajasti sujuvalt töötava animatsiooni asjatut katkestamist!
+      if (wrapEl.style.getPropertyValue('--marquee-distance') !== distStr) {
+        wrapEl.style.setProperty('--marquee-distance', distStr);
+        wrapEl.style.setProperty('--marquee-duration', durationStr);
+      }
+      if (!wrapEl.classList.contains('is-scrolling')) {
+        wrapEl.classList.add('is-scrolling');
+      }
+    } else {
+      if (wrapEl.classList.contains('is-scrolling')) {
+        wrapEl.classList.remove('is-scrolling');
+        wrapEl.style.removeProperty('--marquee-distance');
+        wrapEl.style.removeProperty('--marquee-duration');
+      }
+    }
+  }
+
+  function updateAllSourceMarquees() {
+    if (!sourcesListEl || (sidebar && sidebar.classList.contains('collapsed'))) return;
+    const items = sourcesListEl.querySelectorAll('.nav-item');
+    items.forEach((item) => {
+      const wrapEl = item.querySelector('.nav-label-wrap');
+      const labelEl = item.querySelector('.nav-label');
+      if (wrapEl && labelEl) {
+        updateSourceNavMarquee(wrapEl, labelEl);
+      }
+    });
   }
 
   function renderSources() {
@@ -1112,6 +1195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           collapsedCategories.delete(cat.id);
           chevronBtn.title = 'Ahenda kategooria';
+          requestAnimationFrame(updateAllSourceMarquees);
         }
         saveCollapsedCategories();
       });
@@ -1186,6 +1270,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateHeaderTitle();
+    requestAnimationFrame(updateAllSourceMarquees);
+    setTimeout(updateAllSourceMarquees, 60);
   }
 
   function updateActiveNav() {
@@ -1356,7 +1442,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="source-group-header">
           <div class="source-info">
             <div class="source-logo-container">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                 <path d="M4 11a9 9 0 0 1 9 9"></path>
                 <path d="M4 4a16 16 0 0 1 16 16"></path>
                 <circle cx="5" cy="19" r="1"></circle>
@@ -1414,7 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${escapeHtml(art.title)}
             </a>
             <div class="article-meta">
-              <span class="article-time" title="${escapeHtml(art.published_at)}">${escapeHtml(timeFormatted)}</span>
+              <span class="article-time" title="${escapeHtml(timeFormatted)}">${escapeHtml(timeFormatted)}</span>
               <div class="article-actions">
                 <button class="btn-read-later ${art.is_read_later ? 'active' : ''}" title="${art.is_read_later ? 'Eemalda hiljem lugemisest' : 'Loe hiljem'}" data-id="${art.id}">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="${art.is_read_later ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2427,6 +2513,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay.classList.toggle('active', isOpen);
       }
       updateModalScrollLock();
+      if (isOpen) {
+        requestAnimationFrame(updateAllSourceMarquees);
+      }
     } else {
       const isCollapsed = sidebar.classList.toggle('collapsed');
       if (btnToggleSidebar) {
@@ -2442,6 +2531,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetFeedScrollPosition();
         updateActiveNav();
         loadArticles({ scrollToTop: true });
+      } else if (!isCollapsed) {
+        requestAnimationFrame(updateAllSourceMarquees);
       }
     }
   }
@@ -2617,14 +2708,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Ekraani laiuse muutumisel korrasta mobiilimenüü ja kerimislukk
+  // Ekraani laiuse muutumisel korrasta mobiilimenüü, kerimislukk ja allikate kerimine
   window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && sidebar && sidebar.classList.contains('mobile-open')) {
       closeMobileSidebar();
     } else {
       updateModalScrollLock();
     }
+    updateAllStatMarquees();
+    updateAllSourceMarquees();
   });
+
+  // Külgriba avanemise ja laienemise animatsiooni lõppemisel mõõda uuesti
+  if (sidebar) {
+    sidebar.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'width' || e.propertyName === 'transform') {
+        updateAllSourceMarquees();
+      }
+    });
+  }
+
+  // Tuvasta allikate loendi laiuse muutused
+  if (typeof ResizeObserver !== 'undefined' && sourcesListEl) {
+    let sourceMarqueeRaf = null;
+    const sourcesRo = new ResizeObserver(() => {
+      if (sourceMarqueeRaf) cancelAnimationFrame(sourceMarqueeRaf);
+      sourceMarqueeRaf = requestAnimationFrame(updateAllSourceMarquees);
+    });
+    sourcesRo.observe(sourcesListEl);
+  }
+
+  // Fontide laadimise järel mõõda vajadusel uuesti üle
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      requestAnimationFrame(updateAllSourceMarquees);
+    });
+  }
 
   // OPML eksport
   const btnExportOpml = document.getElementById('btnExportOpml') || document.getElementById('btnProfileExportOpml');

@@ -30,7 +30,7 @@
     rel="stylesheet">
 
   <!-- Stiilid -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='21') }}">
 
   <script>
     window.INITIAL_RESET_TOKEN = {{ reset_token|tojson if reset_token else 'null' }};
@@ -867,7 +867,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Rakenduse skript -->
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js', v='21') }}"></script>
 </body>
 
 </html>

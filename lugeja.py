@@ -7,7 +7,10 @@ import os
 import sqlite3
 import threading
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+
+TALLINN_TZ = ZoneInfo("Europe/Tallinn")
 import base64
 import hashlib
 import html
@@ -72,8 +75,9 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_NAME'] = 'lugeja_session'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
-app.config['SESSION_REFRESH_EACH_REQUEST'] = True
-app.config['SESSION_COOKIE_SECURE'] = bool(not app.debug or os.environ.get('TURSO_DATABASE_URL'))
+is_render = bool(os.environ.get('RENDER') or os.environ.get('RENDER_SERVICE_ID'))
+is_secure_env = os.environ.get('SESSION_COOKIE_SECURE', '').strip().lower() in ('1', 'true', 'yes')
+app.config['SESSION_COOKIE_SECURE'] = bool(is_render or is_secure_env)
 
 # Lukustus andmebaasi tehingute ja uuendamiste koordineerimiseks
 refresh_lock = threading.Lock()
@@ -214,6 +218,29 @@ class TursoCursor:
         self._rows = []
         self._idx = 0
 
+_thread_local = threading.local()
+
+def _get_turso_session(auth_token):
+    session = getattr(_thread_local, 'turso_session', None)
+    stored_token = getattr(_thread_local, 'turso_token', None)
+    if session is None or stored_token != auth_token:
+        if session:
+            try:
+                session.close()
+            except Exception:
+                pass
+        session = requests.Session()
+        adapter = requests.adapters.HTTPAdapter(pool_connections=10, pool_maxsize=20)
+        session.mount('https://', adapter)
+        session.mount('http://', adapter)
+        session.headers.update({
+            'Authorization': f'Bearer {auth_token}',
+            'Content-Type': 'application/json'
+        })
+        _thread_local.turso_session = session
+        _thread_local.turso_token = auth_token
+    return session
+
 class TursoHttpClient:
     """
     Turso HTTP Pipeline API klient.
@@ -222,6 +249,7 @@ class TursoHttpClient:
       - Töötab 100% stabiilselt ilma Rust/C lisamoodulite hangumiste või ühenduse katkemisteta.
       - Toetab rangeid päringute ajalõppe (timeout=15s), välistades lõputu laadimise.
       - Lõimeturvaline ja sobib ideaalselt Render / Gunicorn pilvekeskkondadesse.
+      - Kasutab lõimepõhist ühenduste basseini (Connection Pool), vältides TLS kätlusi igal päringul.
     """
     def __init__(self, db_url, auth_token, timeout=15):
         clean_url = db_url.strip()
@@ -234,11 +262,7 @@ class TursoHttpClient:
         self.endpoint = self.base_url.rstrip('/') + '/v2/pipeline'
         self.auth_token = auth_token.strip()
         self.timeout = timeout
-        self.session = requests.Session()
-        self.session.headers.update({
-            'Authorization': f'Bearer {self.auth_token}',
-            'Content-Type': 'application/json'
-        })
+        self.session = _get_turso_session(self.auth_token)
 
     def _to_arg(self, val):
         if val is None:
@@ -425,10 +449,8 @@ class TursoHttpClient:
         pass
 
     def close(self):
-        try:
-            self.session.close()
-        except Exception:
-            pass
+        # Sessioon säilitatakse lõimes ühenduste taaskasutamiseks (Connection Pooling)
+        pass
 
 def get_db_connection():
     if IS_TURSO:
@@ -928,7 +950,7 @@ def refresh_all_sources(specific_source_id=None, is_new_source=False, user_id=No
         if not sources:
             return 0
 
-        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_str = datetime.now(TALLINN_TZ).strftime("%Y-%m-%d %H:%M:%S")
 
         # Paralleelne uudiste tõmbamine välisveebidest (kõik allikad korraga paralleelselt, kuni 12 lõime)
         max_threads = min(len(sources), 12)
@@ -1552,6 +1574,8 @@ def get_user_stats(current_user):
                 dt = datetime.fromisoformat(s)
             else:
                 dt = datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
+            if hasattr(dt, 'tzinfo') and dt.tzinfo is not None:
+                dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
             delta = datetime.now() - dt
             account_age_days = max(0, delta.days)
             if account_age_days == 0:

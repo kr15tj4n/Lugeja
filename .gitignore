@@ -6,4 +6,3 @@ __pycache__/
 .env.*
 .secret_key
 AGENTS.md
-tests/

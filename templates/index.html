@@ -15,22 +15,22 @@
   
   <!-- Progressive Web App (PWA) manifest ja metatagid -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#121316">
+  <meta name="theme-color" content="#0F1511">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Lugeja">
 
-  <!-- Google Fonts: IBM Plex Sans & IBM Plex Mono (Aktsiaraamat.ee stiilis) -->
+  <!-- Google Fonts: Roboto & Roboto Mono (Material Design 3 tüpograafia) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- Stiilid -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='21') }}">
+  <!-- Stiilid (Material Design 3) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='22') }}">
 
   <script>
     window.INITIAL_RESET_TOKEN = {{ reset_token|tojson if reset_token else 'null' }};
@@ -179,7 +179,7 @@
         <!-- Artiklite grupid lisatakse JS-ga -->
         <div class="empty-state">
           <div class="loading-spinner-wrap" style="margin-bottom: 0.85rem;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite; color: var(--va-acc);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite; color: var(--md-sys-color-primary);">
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
           </div>
@@ -190,7 +190,7 @@
     </main>
   </div>
 
-  <!-- Uue allika lisamise modaal (Glassmorphism) -->
+  <!-- Uue allika lisamise modaal (M3 Dialog) -->
   <div class="modal-backdrop" id="addSourceModal" role="dialog" aria-modal="true" aria-labelledby="addSourceModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -253,7 +253,7 @@
     </div>
   </div>
 
-  <!-- Allika muutmise modaal (Glassmorphism) -->
+  <!-- Allika muutmise modaal (M3 Dialog) -->
   <div class="modal-backdrop" id="editSourceModal" role="dialog" aria-modal="true" aria-labelledby="editSourceModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -347,7 +347,7 @@
     </div>
   </div>
 
-  <!-- Uue kategooria lisamise modaal (Glassmorphism) -->
+  <!-- Uue kategooria lisamise modaal (M3 Dialog) -->
   <div class="modal-backdrop" id="addCategoryModal" role="dialog" aria-modal="true" aria-labelledby="addCategoryModalTitle" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
@@ -460,7 +460,7 @@
     </div>
   </div>
 
-  <!-- Kasutaja profiili modaalaken (Glassmorphism) -->
+  <!-- Kasutaja profiili modaalaken (M3 Dialog) -->
   <div class="modal-backdrop" id="userProfileModal" role="dialog" aria-modal="true" aria-labelledby="userProfileModalTitle" aria-hidden="true">
     <div class="modal-content modal-user-profile">
       <div class="modal-header">
@@ -618,10 +618,7 @@
                 </svg>
               </div>
             </div>
-            <div class="user-device-bar-track" id="deviceBarTrack">
-              <div class="user-device-bar-segment segment-mobile" id="deviceBarSegmentMobile" style="width: 50%;"></div>
-              <div class="user-device-bar-segment segment-desktop" id="deviceBarSegmentDesktop" style="width: 50%;"></div>
-            </div>
+            <div class="user-device-bar-track" id="deviceBarTrack"></div>
           </div>
         </div>
 
@@ -867,7 +864,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Rakenduse skript -->
-  <script src="{{ url_for('static', filename='js/app.js', v='21') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js', v='22') }}"></script>
 </body>
 
 </html>

@@ -3,11 +3,14 @@
  * Tagab PWA funktsionaalsuse, välkkiire laadimise ja võrguühenduseta (offline) toe.
  */
 
-const CACHE_NAME = 'lugeja-shell-v21';
+const CACHE_NAME = 'lugeja-shell-v22';
 const DATA_CACHE_NAME = 'lugeja-data';
 
 const PRECACHE_ASSETS = [
   '/',
+  '/manifest.json',
+  '/static/css/style.css?v=22',
+  '/static/js/app.js?v=22',
   '/static/css/style.css',
   '/static/js/app.js',
   '/static/favicon.svg',

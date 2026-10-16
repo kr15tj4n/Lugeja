@@ -648,59 +648,59 @@ def send_password_reset_email(to_email, reset_url, username=""):
   <meta charset="utf-8">
   <style>
     body {{
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #121316;
-      color: #e4e6eb;
+      font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background-color: #0F1511;
+      color: #DEE4DE;
       padding: 30px 15px;
       margin: 0;
     }}
     .container {{
       max-width: 500px;
       margin: 0 auto;
-      background-color: #18191d;
-      border: 1px solid #2a2c32;
-      border-radius: 12px;
+      background-color: #1B211D;
+      border: 1px solid #303632;
+      border-radius: 20px;
       padding: 32px 28px;
     }}
     .brand-title {{
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
-      color: #358D4D;
-      letter-spacing: -0.02em;
+      color: #8BD69E;
+      letter-spacing: -0.01em;
       margin-bottom: 20px;
     }}
     h1 {{
       font-size: 18px;
       font-weight: 600;
-      color: #ffffff;
+      color: #DEE4DE;
       margin: 0 0 16px 0;
     }}
     p {{
       font-size: 14px;
       line-height: 1.6;
-      color: #b0b3b8;
+      color: #BFC9C0;
       margin: 0 0 18px 0;
     }}
     .btn {{
       display: inline-block;
-      background-color: #358D4D;
-      color: #ffffff !important;
+      background-color: #8BD69E;
+      color: #003919 !important;
       text-decoration: none;
       font-weight: 600;
       font-size: 14px;
-      padding: 12px 24px;
-      border-radius: 6px;
+      padding: 12px 28px;
+      border-radius: 9999px;
       margin: 8px 0 20px 0;
     }}
     .link-alt {{
       font-size: 12px;
-      color: #8a8d91;
+      color: #89938B;
       word-break: break-all;
     }}
     .footer {{
       font-size: 12px;
-      color: #6a6c70;
-      border-top: 1px solid #26272c;
+      color: #89938B;
+      border-top: 1px solid #303632;
       padding-top: 16px;
       margin-top: 24px;
     }}
@@ -792,14 +792,22 @@ def check_rate_limit(ip: str, endpoint: str, max_requests: int = 10, window_seco
 
 def get_client_ip():
     """Tuvastab usaldusväärse kliendi IP aadressi kiiruspiirangute jaoks."""
-    cf_ip = request.headers.get('CF-Connecting-IP', '').strip()
-    if cf_ip:
-        return cf_ip
-    forwarded = request.headers.get('X-Forwarded-For', '')
-    if forwarded:
-        parts = [p.strip() for p in forwarded.split(',') if p.strip()]
-        if parts:
-            return parts[-1]
+    # 1. Cloudflare ametlik päis (kui spetsiaalselt sisse lülitatud)
+    if os.environ.get('TRUST_CLOUDFLARE', '').strip().lower() in ('1', 'true', 'yes'):
+        cf_ip = request.headers.get('CF-Connecting-IP', '').strip()
+        if cf_ip:
+            return cf_ip
+
+    # 2. Pöördpuhverserver (Render.com või spetsiaalselt seadistatud TRUST_PROXY)
+    trust_proxy = is_render or os.environ.get('TRUST_PROXY', '').strip().lower() in ('1', 'true', 'yes')
+    if trust_proxy:
+        forwarded = request.headers.get('X-Forwarded-For', '')
+        if forwarded:
+            parts = [p.strip() for p in forwarded.split(',') if p.strip()]
+            if parts:
+                return parts[-1]
+
+    # 3. Otseühendus (turvaline vaikeväärtus ilma võltsitavate päisteta)
     return request.remote_addr or '127.0.0.1'
 
 def get_pwd_version(pwd_hash: str) -> str:

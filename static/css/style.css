@@ -1,41 +1,110 @@
 /* ==========================================================================
-   Lugeja - Kaasaegne tume klaasjas disain
+   Lugeja - Google Material Design 3 (M3 / Material You) Dark Theme
+   Seed Color: Emerald (#358D4D)
    ========================================================================== */
 
 :root {
-  --va-bg: #121316;
-  --va-surface: #18191d;
-  --va-chrome: #141518;
-  --va-surface-glass: rgba(24, 25, 29, 0.85);
-  --va-chrome-glass: rgba(20, 21, 24, 0.90);
-  --va-modal-glass: rgba(24, 25, 29, 0.95);
-  --va-t1: #E2E8F0;
-  --va-t2: rgba(226, 232, 240, 0.62);
-  --va-t3: rgba(226, 232, 240, 0.38);
-  --va-line: rgba(255, 255, 255, 0.08);
-  --va-line-highlight: rgba(255, 255, 255, 0.16);
-  --va-acc: #358D4D;
-  --va-acc-hover: #3E9E57;
-  --va-acc-soft: rgba(53, 141, 77, 0.15);
-  --va-on-acc: #FFFFFF;
-  --va-down: #EF5F6B;
-  --va-down-soft: rgba(239, 95, 107, 0.13);
-  --va-hover: rgba(255, 255, 255, 0.04);
+  /* M3 Tonal Surface Hierarchy (Dark Scheme) */
+  --md-sys-color-background: #0F1511;
+  --md-sys-color-on-background: #DEE4DE;
+  --md-sys-color-surface: #0F1511;
+  --md-sys-color-surface-dim: #0F1511;
+  --md-sys-color-surface-bright: #353B36;
+  --md-sys-color-surface-container-lowest: #0A0F0C;
+  --md-sys-color-surface-container-low: #171D19;
+  --md-sys-color-surface-container: #1B211D;
+  --md-sys-color-surface-container-high: #252B27;
+  --md-sys-color-surface-container-highest: #303632;
+  --md-sys-color-on-surface: #DEE4DE;
+  --md-sys-color-on-surface-variant: #BFC9C0;
+  --md-sys-color-outline: #89938B;
+  --md-sys-color-outline-variant: #404942;
+
+  /* M3 Primary Tones (Emerald) */
+  --md-sys-color-primary: #8BD69E;
+  --md-sys-color-primary-hover: #A0E3B1;
+  --md-sys-color-on-primary: #003919;
+  --md-sys-color-primary-container: #155229;
+  --md-sys-color-on-primary-container: #A6F2B8;
+  --md-sys-color-primary-seed: #358D4D;
+
+  /* M3 Secondary Tones (Sage) */
+  --md-sys-color-secondary: #B6CCB8;
+  --md-sys-color-on-secondary: #223526;
+  --md-sys-color-secondary-container: #384B3C;
+  --md-sys-color-on-secondary-container: #D2E8D3;
+
+  /* M3 Tertiary Tones (Warm Amber - "Loe hiljem" & Admin) */
+  --md-sys-color-tertiary: #FFB951;
+  --md-sys-color-on-tertiary: #452B00;
+  --md-sys-color-tertiary-container: #633F00;
+  --md-sys-color-on-tertiary-container: #FFDDB3;
+
+  /* M3 Error Tones */
+  --md-sys-color-error: #FFB4AB;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000A;
+  --md-sys-color-on-error-container: #FFDAD6;
+
+  /* M3 State Layers */
+  --md-sys-state-hover: rgba(222, 228, 222, 0.08);
+  --md-sys-state-focus: rgba(222, 228, 222, 0.12);
+  --md-sys-state-pressed: rgba(222, 228, 222, 0.14);
+  --md-sys-state-primary-hover: rgba(139, 214, 158, 0.10);
+
+  /* M3 Shape Scale */
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* M3 Elevation Shadows */
+  --md-sys-elevation-1: 0 1px 3px 1px rgba(0, 0, 0, 0.28), 0 1px 2px 0 rgba(0, 0, 0, 0.40);
+  --md-sys-elevation-2: 0 2px 6px 2px rgba(0, 0, 0, 0.32), 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+  --md-sys-elevation-3: 0 4px 12px 3px rgba(0, 0, 0, 0.38), 0 1px 3px 0 rgba(0, 0, 0, 0.50);
+  --md-sys-elevation-4: 0 8px 24px 4px rgba(0, 0, 0, 0.45), 0 2px 6px 0 rgba(0, 0, 0, 0.55);
+
+  /* M3 Motion Easing */
+  --md-sys-motion-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Backward-compatible semantic aliases */
+  --va-bg: var(--md-sys-color-background);
+  --va-surface: var(--md-sys-color-surface-container-low);
+  --va-chrome: var(--md-sys-color-surface-container);
+  --va-surface-glass: rgba(23, 29, 25, 0.92);
+  --va-chrome-glass: rgba(27, 33, 29, 0.94);
+  --va-modal-glass: rgba(37, 43, 39, 0.98);
+  --va-t1: var(--md-sys-color-on-surface);
+  --va-t2: var(--md-sys-color-on-surface-variant);
+  --va-t3: var(--md-sys-color-outline);
+  --va-line: rgba(64, 73, 66, 0.55);
+  --va-line-highlight: var(--md-sys-color-outline);
+  --va-acc: var(--md-sys-color-primary);
+  --va-acc-hover: var(--md-sys-color-primary-hover);
+  --va-acc-soft: var(--md-sys-color-primary-container);
+  --va-on-acc: var(--md-sys-color-on-primary);
+  --va-down: var(--md-sys-color-error);
+  --va-down-soft: rgba(147, 0, 10, 0.45);
+  --va-hover: var(--md-sys-state-hover);
   --va-teal: #287440;
-  --va-mint: #CDF4C7;
-  --va-blue: #6F9BF5;
-  --va-blue-soft: rgba(111, 155, 245, 0.14);
-  --va-amber: #DFA14E;
-  --va-amber-soft: rgba(223, 161, 78, 0.14);
-  --va-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
-  --va-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --va-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-  --va-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.30);
+  --va-mint: var(--md-sys-color-on-primary-container);
+  --va-blue: #A8C7FA;
+  --va-blue-soft: rgba(168, 199, 250, 0.16);
+  --va-amber: var(--md-sys-color-tertiary);
+  --va-amber-soft: rgba(99, 63, 0, 0.55);
+  --va-mono: 'Roboto Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  --va-sans: 'Roboto', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --va-shadow: var(--md-sys-elevation-3);
+  --va-shadow-sm: var(--md-sys-elevation-1);
   --sidebar-width: 290px;
   --header-height: 64px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 15px;
+  --radius-sm: var(--md-sys-shape-corner-small);
+  --radius-md: var(--md-sys-shape-corner-medium);
+  --radius-lg: var(--md-sys-shape-corner-large);
+  --radius-xl: var(--md-sys-shape-corner-extra-large);
+  --radius-full: var(--md-sys-shape-corner-full);
 }
 
 *,
@@ -51,6 +120,7 @@ html {
   -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
   scrollbar-gutter: stable;
+  color-scheme: dark;
 }
 
 button,
@@ -71,10 +141,11 @@ input:focus:not(:focus-visible),
 
 body {
   font-family: var(--va-sans);
-  background-color: var(--va-bg);
-  color: var(--va-t1);
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-surface);
   min-height: 100vh;
   line-height: 1.5;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -82,7 +153,7 @@ body {
 }
 
 /* ==========================================================================
-   Paigutus (Layout)
+   Paigutus (M3 Layout)
    ========================================================================== */
 
 .app-container {
@@ -93,10 +164,10 @@ body {
   z-index: 1;
 }
 
-/* Külgriba (Sidebar) */
+/* M3 Navigation Drawer (Külgriba) */
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--va-chrome);
+  background: var(--md-sys-color-surface-container-low);
   border-right: 1px solid var(--va-line);
   display: flex;
   flex-direction: column;
@@ -105,7 +176,7 @@ body {
   bottom: 0;
   left: 0;
   z-index: 95;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.3s var(--md-sys-motion-standard), transform 0.3s var(--md-sys-motion-standard);
 }
 
 .sidebar-header {
@@ -123,75 +194,83 @@ body {
   align-items: center;
   gap: 0.65rem;
   text-decoration: none;
-  color: #FFFFFF;
+  color: var(--md-sys-color-on-surface);
+  border-radius: var(--md-sys-shape-corner-small);
+  padding: 0.2rem 0.35rem 0.2rem 0.15rem;
+  transition: background-color 0.18s var(--md-sys-motion-standard);
+}
+
+.app-brand:hover {
+  background: var(--md-sys-state-hover);
 }
 
 .brand-logo {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 0;
   display: block;
   object-fit: contain;
-  filter: drop-shadow(0 1px 4px rgba(53, 141, 77, 0.1));
 }
 
 .brand-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #FFFFFF;
-  line-height: 1;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.2;
 }
 
 .brand-badge {
   font-family: var(--va-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.68rem;
+  font-weight: 500;
   text-transform: uppercase;
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--md-sys-shape-corner-full);
   letter-spacing: 0.04em;
-  border: 1px solid rgba(53, 141, 77, 0.25);
 }
 
-/* Mobiilivaate taustakate (Overlay) külgriba sulgemiseks */
+/* Mobiilivaate taustakate (M3 Scrim) külgriba sulgemiseks */
 .sidebar-overlay {
   display: none;
 }
 
-/* Külgriba sisu ja nimekirjad */
+/* Külgriba päis ja M3 Extended Tonal FAB ("+ Lisa") */
 .sidebar-section-title {
-  font-family: var(--va-mono);
-  font-size: 0.72rem;
+  font-family: var(--va-sans);
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--va-t3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  color: var(--md-sys-color-on-surface-variant);
+  letter-spacing: 0.04em;
+  padding: 1rem 1rem 0.5rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .btn-add-source {
-  padding: 0.28rem 0.6rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 8px;
-  background: var(--va-acc);
-  color: var(--va-on-acc);
+  padding: 0.42rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.35rem;
   line-height: 1;
-  transition: background 0.15s ease;
+  box-shadow: var(--md-sys-elevation-1);
+  transition: background-color 0.2s var(--md-sys-motion-standard), box-shadow 0.2s var(--md-sys-motion-standard), transform 0.1s var(--md-sys-motion-standard);
   border: none;
 }
 
 .btn-add-source:hover {
-  background: var(--va-acc-hover);
+  background: #1D6635;
+  color: #FFFFFF;
+  box-shadow: var(--md-sys-elevation-2);
 }
 
 .dropdown-add-wrap {
@@ -199,7 +278,7 @@ body {
 }
 
 .dropdown-arrow-icon {
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--md-sys-motion-standard);
   flex-shrink: 0;
 }
 
@@ -207,19 +286,20 @@ body {
   transform: rotate(180deg);
 }
 
+/* M3 Menu */
 .dropdown-add-menu {
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  min-width: 180px;
-  background: var(--va-chrome);
-  border: 1px solid var(--va-line);
-  border-radius: 9px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
-  padding: 0.35rem;
+  min-width: 200px;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid rgba(138, 147, 139, 0.2);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-3);
+  padding: 0.4rem;
   display: none;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.15rem;
   z-index: 120;
 }
 
@@ -230,38 +310,38 @@ body {
 .dropdown-add-item {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.5rem 0.65rem;
-  border-radius: 6px;
+  gap: 0.65rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--md-sys-shape-corner-medium);
   background: transparent;
   border: none;
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
   font-family: var(--va-sans);
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s var(--md-sys-motion-standard), color 0.15s var(--md-sys-motion-standard);
   width: 100%;
 }
 
 .dropdown-add-item:hover {
-  background: var(--va-hover);
+  background: var(--md-sys-state-hover);
   color: #FFFFFF;
 }
 
 .dropdown-add-item svg {
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
   flex-shrink: 0;
 }
 
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
-  padding: 0.5rem 0.75rem;
+  padding: 0.35rem 0.75rem 0.75rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .sidebar-nav::-webkit-scrollbar {
@@ -269,22 +349,25 @@ body {
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
-  background: var(--va-line);
-  border-radius: 4px;
+  background: var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
+/* M3 Navigation Drawer Destination Item (Full Pill Active Indicator) */
 .nav-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: 9px;
-  color: var(--va-t1);
+  padding: 0.55rem 0.9rem;
+  min-height: 44px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  letter-spacing: 0.01em;
+  transition: background-color 0.18s var(--md-sys-motion-standard), color 0.18s var(--md-sys-motion-standard);
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -293,56 +376,61 @@ body {
 }
 
 .nav-item:hover {
-  background: var(--va-hover);
-  color: #FFFFFF;
+  background: var(--md-sys-state-hover);
+  color: var(--md-sys-color-on-surface);
 }
 
 .nav-item.active {
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-weight: 600;
   border-color: transparent;
+}
+
+.nav-item.active:hover {
+  background: #1B5E31;
 }
 
 .nav-item-content {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.65rem;
   min-width: 0;
   flex: 1;
 }
 
 .nav-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
   border: none;
-  color: var(--va-t2);
-  transition: color 0.15s ease;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: color 0.15s var(--md-sys-motion-standard);
 }
 
 .nav-icon svg {
   stroke: currentColor;
-  transition: stroke 0.15s ease;
+  transition: stroke 0.15s var(--md-sys-motion-standard);
 }
 
 .nav-item:hover .nav-icon {
-  color: #FFFFFF;
+  color: var(--md-sys-color-on-surface);
   background: transparent;
   border: none;
 }
 
 .nav-item.active .nav-icon {
   background: transparent;
-  color: var(--va-acc);
+  color: var(--md-sys-color-on-primary-container);
   border: none;
 }
 
 .nav-item.active .nav-icon svg {
-  stroke: var(--va-acc);
+  stroke: var(--md-sys-color-on-primary-container);
 }
 
 .source-logo-container {
@@ -351,7 +439,7 @@ body {
   background: transparent;
   border: none;
   box-shadow: none;
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -359,7 +447,7 @@ body {
 }
 
 .source-logo-container svg {
-  stroke: var(--va-acc);
+  stroke: var(--md-sys-color-primary);
 }
 
 .nav-label-wrap {
@@ -425,17 +513,18 @@ body {
   }
 }
 
+/* M3 Badge */
 .nav-badge {
   font-family: var(--va-mono);
   font-size: 0.72rem;
   font-weight: 600;
   min-width: 1.5rem;
-  height: 1.25rem;
-  padding: 0 0.35rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
+  height: 1.3rem;
+  padding: 0 0.42rem;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
   border: 1px solid transparent;
-  color: var(--va-t2);
+  color: var(--md-sys-color-on-surface-variant);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -443,88 +532,89 @@ body {
   font-variant-numeric: tabular-nums;
   box-sizing: border-box;
   flex-shrink: 0;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition: background-color 0.18s var(--md-sys-motion-standard), color 0.18s var(--md-sys-motion-standard);
 }
 
 .nav-badge.has-unread {
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
-  border-color: rgba(53, 141, 77, 0.3);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: transparent;
 }
 
 .nav-item.active .nav-badge.has-unread {
-  background: var(--va-acc);
-  color: var(--va-on-acc);
-  border-color: rgba(53, 141, 77, 0.4);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: transparent;
 }
 
 .nav-item.active .nav-badge:not(.has-unread) {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--va-t2);
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--md-sys-color-on-primary-container);
   border-color: transparent;
 }
 
 .category-header.active .nav-badge.has-unread {
-  background: var(--va-acc);
-  color: var(--va-on-acc);
-  border-color: rgba(53, 141, 77, 0.4);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: transparent;
 }
 
 .category-header.active .nav-badge:not(.has-unread) {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--va-t2);
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--md-sys-color-on-primary-container);
   border-color: transparent;
 }
 
+/* "Loe hiljem" M3 Tertiary Amber Tonal Palette */
 #readLaterBadge.has-unread {
-  background: rgba(245, 158, 11, 0.15);
-  color: #F59E0B;
-  border-color: rgba(245, 158, 11, 0.35);
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border-color: transparent;
 }
 
 #navItemReadLater.active {
-  background: rgba(245, 158, 11, 0.12);
-  color: #F59E0B;
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active:hover {
-  background: rgba(245, 158, 11, 0.16);
-  color: #F59E0B;
+  background: #784D00;
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active .nav-icon {
-  color: #F59E0B;
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active .nav-icon svg {
-  stroke: #F59E0B;
+  stroke: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active:hover .nav-icon {
-  color: #F59E0B;
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active:hover .nav-icon svg {
-  stroke: #F59E0B;
+  stroke: var(--md-sys-color-on-tertiary-container);
 }
 
 #navItemReadLater.active .nav-badge.has-unread {
-  background: #F59E0B;
-  color: #110e05;
-  border-color: rgba(245, 158, 11, 0.4);
-}
-
-#navItemReadLater.active .nav-badge:not(.has-unread) {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--va-t2);
+  background: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
   border-color: transparent;
 }
 
-/* Allikate ja kategooriate grupeerimine */
+#navItemReadLater.active .nav-badge:not(.has-unread) {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--md-sys-color-on-tertiary-container);
+  border-color: transparent;
+}
+
+/* Allikate ja kategooriate grupeerimine (M3 Navigation Drawer Section) */
 .category-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .category-header {
@@ -532,12 +622,13 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.45rem;
-  padding: 0.45rem 0.5rem 0.45rem 0.35rem;
-  border-radius: 8px;
-  color: var(--va-t1);
-  font-size: 0.84rem;
-  font-weight: 600;
-  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  padding: 0.45rem 0.75rem 0.45rem 0.5rem;
+  min-height: 42px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.18s var(--md-sys-motion-standard), color 0.18s var(--md-sys-motion-standard);
   background: transparent;
   border: 1px solid transparent;
   user-select: none;
@@ -545,12 +636,13 @@ body {
 }
 
 .category-header:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--md-sys-state-hover);
 }
 
 .category-header.active {
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-weight: 600;
 }
 
 .category-left {
@@ -564,24 +656,25 @@ body {
 .category-chevron-btn {
   background: transparent;
   border: none;
-  color: var(--va-t3);
-  padding: 3px;
+  color: var(--md-sys-color-on-surface-variant);
+  width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.18s ease;
+  border-radius: var(--md-sys-shape-corner-full);
+  transition: all 0.18s var(--md-sys-motion-standard);
   flex-shrink: 0;
 }
 
 .category-chevron-btn:hover {
-  color: var(--va-t1);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-state-focus);
 }
 
 .category-chevron-icon {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s var(--md-sys-motion-standard);
 }
 
 .category-group.collapsed .category-chevron-icon {
@@ -597,7 +690,7 @@ body {
   font-weight: inherit;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   cursor: pointer;
   padding: 0;
   text-align: left;
@@ -610,12 +703,16 @@ body {
 }
 
 .category-header.active .category-title-btn {
-  color: var(--va-acc);
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .category-folder-icon {
-  color: var(--va-t2);
+  color: var(--md-sys-color-on-surface-variant);
   flex-shrink: 0;
+}
+
+.category-header.active .category-folder-icon {
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .category-name-text {
@@ -634,44 +731,52 @@ body {
 .category-actions {
   display: none;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.15rem;
 }
 
-.category-header:hover .category-actions {
+.category-header:hover .category-actions,
+.category-header:focus-within .category-actions {
   display: flex;
+}
+
+@media (max-width: 900px), (hover: none) {
+  .category-actions {
+    display: flex;
+  }
 }
 
 .btn-cat-action {
   background: transparent;
   border: none;
-  color: var(--va-t3);
-  padding: 3px;
-  border-radius: 4px;
+  color: var(--md-sys-color-on-surface-variant);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--md-sys-shape-corner-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .btn-cat-action:hover {
-  color: var(--va-t1);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-state-focus);
 }
 
 .btn-cat-action.btn-cat-delete:hover {
-  color: #F87171;
-  background: rgba(239, 68, 68, 0.15);
+  color: var(--md-sys-color-error);
+  background: rgba(147, 0, 10, 0.45);
 }
 
 .category-sources-list {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding-left: 0.9rem;
+  gap: 0.15rem;
+  padding-left: 0.75rem;
   margin-top: 0.15rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  margin-left: 0.75rem;
+  border-left: 1px solid var(--md-sys-color-outline-variant);
+  margin-left: 1.1rem;
 }
 
 .category-group.collapsed .category-sources-list {
@@ -679,7 +784,8 @@ body {
 }
 
 .nav-item.nav-item-sub {
-  padding: 0.45rem 0.65rem;
+  padding: 0.42rem 0.75rem;
+  min-height: 38px;
   font-size: 0.84rem;
   gap: 0.45rem;
 }
@@ -689,46 +795,10 @@ body {
   height: 16px;
 }
 
-/* Allikate nimekirja all asuv OPML eksportimise link */
-.sidebar-export-wrap {
-  margin-top: 0.65rem;
-  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
-  border-top: 1px dashed var(--va-line);
-}
-
-.sidebar-export-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.76rem;
-  color: var(--va-t2);
-  text-decoration: none;
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
-  transition: all 0.18s ease;
-  width: 100%;
-}
-
-.sidebar-export-link:hover {
-  color: var(--va-t1);
-  background: var(--va-hover);
-}
-
-.sidebar-export-link svg {
-  opacity: 0.75;
-  transition: opacity 0.18s ease, transform 0.18s ease;
-  flex-shrink: 0;
-}
-
-.sidebar-export-link:hover svg {
-  opacity: 1;
-  transform: translateY(1px);
-}
-
 /* PWA paigaldamise nupp päises */
 #btnInstallPwa:hover {
-  color: var(--va-acc);
-  border-color: rgba(53, 141, 77, 0.4);
+  color: var(--md-sys-color-primary);
+  background: var(--md-sys-state-primary-hover);
 }
 
 #btnInstallPwa:hover svg {
@@ -736,7 +806,7 @@ body {
 }
 
 #btnInstallPwa svg {
-  transition: transform 0.18s ease;
+  transition: transform 0.18s var(--md-sys-motion-standard);
 }
 
 /* Külgriba jalus */
@@ -749,34 +819,34 @@ body {
 }
 
 /* ==========================================================================
-   Kokkuklapitud külgriba (Collapsed Sidebar)
+   M3 Navigation Rail (Kokkuklapitud külgriba)
    ========================================================================== */
 
 @media (min-width: 901px) {
   .sidebar.collapsed {
-    width: 68px;
+    width: 72px;
   }
 
   .sidebar.collapsed ~ .main-content {
-    margin-left: 68px;
+    margin-left: 72px;
   }
 
-  /* Peida Andmeallikad pealkirja tekst ja sulgemisnupp */
+  /* Peida Andmeallikad pealkirja tekst */
   .sidebar.collapsed .sidebar-section-title {
     padding: 0.85rem 0.5rem 0.6rem 0.5rem;
     justify-content: center;
   }
 
-  .sidebar.collapsed .sidebar-section-title>span {
+  .sidebar.collapsed .sidebar-section-title > span {
     display: none !important;
   }
 
-  /* Pisem Lisa nupp */
+  /* M3 Compact FAB */
   .sidebar.collapsed .btn-add-source {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
     padding: 0;
-    border-radius: 7px;
+    border-radius: var(--md-sys-shape-corner-medium);
     justify-content: center;
   }
 
@@ -785,8 +855,8 @@ body {
   }
 
   .sidebar.collapsed .btn-add-source svg {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
   }
 
   .sidebar.collapsed .dropdown-arrow-icon {
@@ -795,30 +865,31 @@ body {
 
   .sidebar.collapsed .dropdown-add-menu {
     right: auto;
-    left: calc(100% + 8px);
+    left: calc(100% + 10px);
     top: 0;
   }
 
-  /* Ära näita peidetud menüü korral eraldi kõiki allikaid ega ekspordi linki */
-  .sidebar.collapsed #sourcesList,
-  .sidebar.collapsed .sidebar-export-wrap {
+  /* Ära näita peidetud menüü korral allikate loendit */
+  .sidebar.collapsed #sourcesList {
     display: none !important;
   }
 
-  /* Navigatsioon collapsed režiimis: ainult Kõik allikad nupp */
+  /* Navigatsioon collapsed režiimis (M3 Navigation Rail) */
   .sidebar.collapsed .sidebar-nav {
     padding: 0.5rem 0.35rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.65rem;
   }
 
   .sidebar.collapsed #navItemAll,
   .sidebar.collapsed #navItemReadLater {
-    width: 28px;
-    height: 28px;
+    width: 48px;
+    height: 36px;
+    min-height: 36px;
     padding: 0;
-    margin: 0 auto 0.5rem auto;
+    margin: 0 auto 0.35rem auto;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -826,7 +897,7 @@ body {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    border-radius: 7px;
+    border-radius: var(--md-sys-shape-corner-full);
   }
 
   .sidebar.collapsed #navItemAll .nav-item-content,
@@ -841,42 +912,39 @@ body {
 
   .sidebar.collapsed #navItemAll .nav-icon,
   .sidebar.collapsed #navItemReadLater .nav-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
+    width: 48px;
+    height: 32px;
+    border-radius: var(--md-sys-shape-corner-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--va-line);
-    color: var(--va-text-muted);
-    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    color: var(--md-sys-color-on-surface-variant);
+    transition: all 0.2s var(--md-sys-motion-standard);
     flex-shrink: 0;
   }
 
   .sidebar.collapsed #navItemAll:hover .nav-icon,
   .sidebar.collapsed #navItemReadLater:hover .nav-icon {
-    background: rgba(255, 255, 255, 0.09);
-    color: var(--va-text-main);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--md-sys-state-hover);
+    color: var(--md-sys-color-on-surface);
   }
 
   .sidebar.collapsed #navItemAll.active .nav-icon {
-    background: var(--va-acc-soft);
-    border-color: rgba(53, 141, 77, 0.35);
-    color: var(--va-acc);
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
   }
 
   .sidebar.collapsed #navItemReadLater.active .nav-icon {
-    background: rgba(245, 158, 11, 0.2);
-    border-color: rgba(245, 158, 11, 0.4);
-    color: #F59E0B;
+    background: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-tertiary-container);
   }
 
   .sidebar.collapsed #navItemAll .nav-icon svg,
   .sidebar.collapsed #navItemReadLater .nav-icon svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 
   .sidebar.collapsed #navItemAll .nav-label,
@@ -890,33 +958,38 @@ body {
     bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 0.6rem;
+    font-size: 0.62rem;
     font-weight: 700;
     line-height: 1;
-    padding: 1px 4px;
-    min-width: 16px;
-    height: 13px;
+    padding: 1px 5px;
+    min-width: 18px;
+    height: 14px;
     text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 999px;
-    background: var(--va-acc);
-    color: #06150e;
-    border: 1.5px solid var(--va-bg);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border: 1.5px solid var(--md-sys-color-surface-container-low);
+    box-shadow: var(--md-sys-elevation-1);
     z-index: 2;
     pointer-events: none;
   }
 
   .sidebar.collapsed #navItemReadLater .nav-badge {
-    background: #F59E0B;
-    color: #110e05;
+    background: var(--md-sys-color-tertiary);
+    color: var(--md-sys-color-on-tertiary);
+  }
+
+  .sidebar.collapsed #navItemAll .nav-badge:not(.has-unread),
+  .sidebar.collapsed #navItemReadLater .nav-badge:not(.has-unread) {
+    display: none;
   }
 }
 
 /* ==========================================================================
-   Peamine sisu (Main Content Area)
+   Peamine sisu ja M3 Top App Bar
    ========================================================================== */
 
 .main-content {
@@ -925,13 +998,13 @@ body {
   min-height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
-  transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: margin-left 0.3s var(--md-sys-motion-standard);
 }
 
-/* Ülemine ühtne päiseriba üle kogu ekraani */
+/* M3 Top App Bar */
 .top-bar {
   height: var(--header-height);
-  background: var(--va-chrome);
+  background: var(--md-sys-color-surface-container);
   border-bottom: 1px solid var(--va-line);
   position: fixed;
   top: 0;
@@ -942,31 +1015,30 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
+  padding: 0 1.25rem;
   box-sizing: border-box;
 }
-
 
 .top-bar-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .btn-mobile-menu {
   display: none;
   background: transparent;
   border: none;
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .status-indicator {
@@ -975,44 +1047,44 @@ body {
   gap: 0.4rem;
   font-family: var(--va-mono);
   font-size: 0.72rem;
-  color: var(--va-t2);
+  color: var(--md-sys-color-on-surface-variant);
   margin-right: 0.5rem;
 }
 
 .status-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--va-acc);
+  background: var(--md-sys-color-primary);
 }
 
 .status-dot.updating {
-  background: var(--va-amber);
+  background: var(--md-sys-color-tertiary);
 }
 
 @keyframes pulse {
-  from {
-    opacity: 0.4;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
-/* Nupud */
+/* ==========================================================================
+   M3 Nupud (Buttons & Icon Buttons)
+   ========================================================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 9px;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--md-sys-shape-corner-full);
   font-family: var(--va-sans);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
+  letter-spacing: 0.01em;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background-color 0.18s var(--md-sys-motion-standard), color 0.18s var(--md-sys-motion-standard), border-color 0.18s var(--md-sys-motion-standard), box-shadow 0.18s var(--md-sys-motion-standard);
   border: 1px solid transparent;
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -1025,61 +1097,67 @@ body {
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--va-acc);
+  outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
 
+/* M3 Filled Button */
 .btn-primary {
-  background: var(--va-acc);
-  color: var(--va-on-acc);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: var(--va-acc-hover);
+  background: var(--md-sys-color-primary-hover);
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .btn-blue {
   background: var(--va-blue);
-  color: #0b1c36;
+  color: #062E6F;
   font-weight: 600;
 }
 
 .btn-blue:hover {
-  background: #84aaff;
+  background: #C2D7FC;
 }
 
+/* M3 Tonal / Outlined Button */
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--va-t1);
-  border-color: var(--va-line);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: rgba(138, 147, 139, 0.22);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: var(--md-sys-color-surface-container-highest);
   color: #FFFFFF;
-  border-color: var(--va-line-highlight);
+  border-color: rgba(138, 147, 139, 0.4);
 }
 
+/* M3 Filled Error Button */
 .btn-danger {
-  background: var(--va-down);
-  color: #FFFFFF;
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
   font-weight: 600;
+  border-color: rgba(255, 180, 171, 0.2);
 }
 
 .btn-danger:hover {
-  background: #f1727d;
+  background: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
 }
 
-/* Sisse lülitatud / aktiivsed päise ja külgriba nupud */
+/* M3 Tonal Selected Icon Buttons in Top App Bar */
 #btnToggleRead.active,
 #btnToggleSidebar.active,
 #btnMarkAllRead.active,
 #btnRefresh.loading,
 .btn-secondary.active {
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
-  border-color: rgba(53, 141, 77, 0.5);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: transparent;
   box-shadow: none;
 }
 
@@ -1088,8 +1166,8 @@ body {
 #btnMarkAllRead.active:hover,
 #btnRefresh.loading:hover,
 .btn-secondary.active:hover {
-  background: rgba(53, 141, 77, 0.22);
-  border-color: rgba(53, 141, 77, 0.7);
+  background: #1D6635;
+  border-color: transparent;
   color: #FFFFFF;
 }
 
@@ -1097,7 +1175,7 @@ body {
 #btnToggleSidebar.active svg,
 #btnMarkAllRead.active svg,
 #btnRefresh.loading svg {
-  stroke: var(--va-acc);
+  stroke: var(--md-sys-color-on-primary-container);
 }
 
 #btnRefresh.loading svg {
@@ -1105,13 +1183,15 @@ body {
 }
 
 #btnToggleRead.active svg circle {
-  fill: var(--va-acc);
+  fill: var(--md-sys-color-on-primary-container);
 }
 
+/* M3 Standard / Tonal Circular Icon Button (40x40) */
 .btn-icon-only {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
+  border-radius: var(--md-sys-shape-corner-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1121,8 +1201,8 @@ body {
 /* Nuppude kliki tagasiside (:active) */
 .btn:active,
 .btn-icon-only:active {
-  transform: scale(0.92) !important;
-  transition: transform 0.08s ease;
+  transform: scale(0.94) !important;
+  transition: transform 0.08s var(--md-sys-motion-standard);
 }
 
 #btnMarkAllRead.shake {
@@ -1141,7 +1221,7 @@ body {
 }
 
 /* ==========================================================================
-   Uudisvoo sisu (Feed Container)
+   Uudisvoo sisu (M3 Feed Container & Cards)
    ========================================================================== */
 
 .feed-container {
@@ -1149,8 +1229,8 @@ body {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.75rem 2rem calc(100vh - 20px) 2rem;
-  padding: 1.75rem 2rem calc(100svh - 20px) 2rem;
+  padding: 1.5rem 2rem calc(100vh - 20px) 2rem;
+  padding: 1.5rem 2rem calc(100svh - 20px) 2rem;
 }
 
 .feed-container.has-empty-state,
@@ -1158,15 +1238,15 @@ body {
   padding-bottom: 3rem;
 }
 
-/* Allika grupp */
+/* M3 Elevated / Outlined Card (Allika grupp) */
 .source-group {
-  margin-bottom: 0.65rem;
-  background: var(--va-surface);
+  margin-bottom: 0.75rem;
+  background: var(--md-sys-color-surface-container-low);
   border: 1px solid var(--va-line);
-  border-radius: var(--radius-lg);
+  border-radius: var(--md-sys-shape-corner-large);
   overflow: hidden;
-  box-shadow: var(--va-shadow-sm);
-  transition: border-color 0.2s ease;
+  box-shadow: var(--md-sys-elevation-1);
+  transition: border-color 0.2s var(--md-sys-motion-standard);
   contain: layout style;
 }
 
@@ -1175,12 +1255,12 @@ body {
 }
 
 .source-group:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(138, 147, 139, 0.45);
 }
 
 .source-group-header {
   padding: 0.65rem 1.15rem;
-  background: var(--va-chrome);
+  background: var(--md-sys-color-surface-container);
   border-bottom: 1px solid var(--va-line);
   display: flex;
   align-items: center;
@@ -1190,23 +1270,25 @@ body {
 .source-info {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
 }
 
 .source-name {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--va-acc);
-  letter-spacing: -0.01em;
+  color: var(--md-sys-color-primary);
+  letter-spacing: 0;
 }
 
+/* M3 Assist Chip style pill */
 .source-type-pill {
   font-family: var(--va-mono);
-  font-size: 0.65rem;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--va-t2);
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
   text-transform: uppercase;
 }
 
@@ -1216,19 +1298,24 @@ body {
   gap: 0.5rem;
 }
 
+.btn-group-mark-read {
+  width: 32px;
+  height: 32px;
+}
+
 .source-articles-list {
   display: flex;
   flex-direction: column;
 }
 
-/* Artiklikirje */
+/* M3 List Item (Artiklikirje) */
 .article-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.48rem 1.15rem;
-  border-bottom: 1px solid var(--va-line);
-  transition: opacity 0.2s ease, background-color 0.15s ease;
+  padding: 0.52rem 1.15rem;
+  border-bottom: 1px solid rgba(64, 73, 66, 0.45);
+  transition: opacity 0.2s var(--md-sys-motion-standard), background-color 0.15s var(--md-sys-motion-standard);
   position: relative;
   background: transparent;
 }
@@ -1238,16 +1325,16 @@ body {
 }
 
 .article-item:hover {
-  background: var(--va-hover);
+  background: var(--md-sys-state-hover);
 }
 
 .article-item.is-read {
-  opacity: 0.38;
-  transition: opacity 0.25s ease;
+  opacity: 0.40;
+  transition: opacity 0.25s var(--md-sys-motion-standard);
 }
 
 .article-item.is-read:hover {
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .article-main {
@@ -1261,22 +1348,23 @@ body {
 .article-time {
   order: 1;
   font-family: var(--va-mono);
-  font-size: 0.72rem;
-  color: var(--va-t2);
+  font-size: 0.74rem;
+  color: var(--md-sys-color-on-surface-variant);
   white-space: nowrap;
   flex-shrink: 0;
-  margin-right: 0.85rem;
+  margin-right: 0.9rem;
 }
 
 .article-title-link {
   order: 2;
   flex: 1;
   min-width: 0;
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--va-t1);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--md-sys-color-on-surface);
   text-decoration: none;
-  line-height: 1.35;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -1286,22 +1374,22 @@ body {
 
 .article-title-link:hover {
   text-decoration: none;
-  color: inherit;
+  color: #FFFFFF;
 }
 
-/* Pisipildid (Thumbnails) */
+/* Pisipildid (M3 Rounded Media Thumbnails) */
 .article-thumb-link {
   order: 3;
   display: block;
-  width: 64px;
-  height: 44px;
-  border-radius: 6px;
+  width: 66px;
+  height: 46px;
+  border-radius: var(--md-sys-shape-corner-small);
   overflow: hidden;
   flex-shrink: 0;
-  background-color: var(--va-surface);
+  background-color: var(--md-sys-color-surface-container-high);
   border: 1px solid var(--va-line);
   margin-left: 0.85rem;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s var(--md-sys-motion-standard);
   position: relative;
   text-decoration: none;
 }
@@ -1311,15 +1399,15 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  background-color: var(--va-surface);
+  background-color: var(--md-sys-color-surface-container-high);
 }
 
 .article-thumb-link:hover {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--md-sys-color-outline);
 }
 
 .article-item.is-read .article-thumb {
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 .article-item.is-read:hover .article-thumb {
@@ -1330,104 +1418,106 @@ body {
   order: 4;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-shrink: 0;
   margin-left: 0.85rem;
 }
 
-/* "Loe hiljem" järjehoidja nupp */
+/* M3 Icon Toggle Button: "Loe hiljem" järjehoidja nupp */
 .btn-read-later {
   background: transparent;
-  border: 1px solid var(--va-line);
-  color: var(--va-t2);
-  width: 25px;
-  height: 25px;
-  border-radius: 7px;
+  border: 1px solid rgba(138, 147, 139, 0.28);
+  color: var(--md-sys-color-on-surface-variant);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--md-sys-shape-corner-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .btn-read-later:hover {
-  background: rgba(245, 158, 11, 0.15);
-  color: #F59E0B;
-  border-color: rgba(245, 158, 11, 0.4);
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border-color: transparent;
 }
 
 .btn-read-later.active {
-  color: #F59E0B;
-  background: rgba(245, 158, 11, 0.18);
-  border-color: rgba(245, 158, 11, 0.5);
+  color: var(--md-sys-color-on-tertiary-container);
+  background: var(--md-sys-color-tertiary-container);
+  border-color: transparent;
 }
 
-/* Manuaalne "Märgi loetuks" nupp */
+/* M3 Icon Toggle Button: Manuaalne "Märgi loetuks" nupp */
 .btn-mark-read {
   background: transparent;
-  border: 1px solid var(--va-line);
-  color: var(--va-t2);
-  width: 25px;
-  height: 25px;
-  border-radius: 7px;
+  border: 1px solid rgba(138, 147, 139, 0.28);
+  color: var(--md-sys-color-on-surface-variant);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--md-sys-shape-corner-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .btn-mark-read:hover {
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
-  border-color: rgba(53, 141, 77, 0.4);
-}
-
-.article-item.is-read .btn-mark-read {
-  color: var(--va-acc);
-  background: var(--va-acc-soft);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   border-color: transparent;
 }
 
-/* Tühi olek */
+.article-item.is-read .btn-mark-read {
+  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-primary-container);
+  border-color: transparent;
+}
+
+/* M3 Tühi olek (Empty State Card) */
 .empty-state {
   text-align: center;
   padding: 4rem 1.5rem;
-  background: var(--va-surface);
-  border: 1px dashed var(--va-line);
-  border-radius: var(--radius-lg);
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--va-line);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   margin-top: 1rem;
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .empty-icon {
   width: 48px;
   height: 48px;
   margin: 0 auto 1rem auto;
-  color: var(--va-t3);
+  color: var(--md-sys-color-primary);
+  opacity: 0.85;
 }
 
 .empty-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
   margin-bottom: 0.5rem;
 }
 
 .empty-desc {
-  font-size: 0.9rem;
-  color: var(--va-t2);
+  font-size: 0.92rem;
+  color: var(--md-sys-color-on-surface-variant);
   max-width: 420px;
   margin: 0 auto 1.5rem auto;
 }
 
 /* ==========================================================================
-   Modaalaken (Glassmorphism Modal)
+   M3 Dialogs / Modaalaknad
    ========================================================================== */
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.65);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -1435,7 +1525,7 @@ body {
   padding: 1rem;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.2s var(--md-sys-motion-standard);
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
@@ -1446,14 +1536,14 @@ body {
 }
 
 .modal-content {
-  background: var(--va-surface);
-  border: 1px solid var(--va-line);
-  border-radius: var(--radius-lg);
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid rgba(138, 147, 139, 0.16);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   width: 100%;
   max-width: 480px;
   max-height: calc(100vh - 2rem);
   max-height: calc(100dvh - 2rem);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--md-sys-elevation-4);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1465,8 +1555,8 @@ body {
 }
 
 .modal-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--va-line);
+  padding: 1.35rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid rgba(64, 73, 66, 0.45);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1474,30 +1564,36 @@ body {
 }
 
 .modal-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: 0;
 }
 
 .modal-close {
   background: transparent;
   border: none;
-  color: var(--va-t2);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  padding: 0.3rem;
-  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--md-sys-shape-corner-full);
+  transition: background-color 0.15s var(--md-sys-motion-standard), color 0.15s var(--md-sys-motion-standard);
 }
 
 .modal-close:hover {
-  color: #FFF;
-  background: var(--va-hover);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-state-hover);
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.35rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.15rem;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -1506,6 +1602,7 @@ body {
   min-height: 0;
 }
 
+/* M3 Outlined Text Fields */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -1513,74 +1610,74 @@ body {
 }
 
 .form-label {
-  font-family: var(--va-mono);
-  font-size: 0.75rem;
+  font-family: var(--va-sans);
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--va-t2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--md-sys-color-on-surface-variant);
+  letter-spacing: 0.02em;
 }
 
 .form-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--va-line);
-  border-radius: var(--radius-sm);
-  padding: 0.65rem 0.85rem;
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 0.75rem 0.95rem;
   font-family: var(--va-sans);
-  font-size: 0.9rem;
-  color: #FFFFFF;
+  font-size: 0.92rem;
+  color: var(--md-sys-color-on-surface);
   outline: none;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s var(--md-sys-motion-standard), box-shadow 0.15s var(--md-sys-motion-standard), background-color 0.15s var(--md-sys-motion-standard);
 }
 
 select.form-input,
 select.form-select {
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238890A0' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23BFC9C0' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.85rem center;
+  background-position: right 0.95rem center;
   background-size: 12px 12px;
-  padding-right: 2.2rem;
+  padding-right: 2.3rem;
   cursor: pointer;
 }
 
 select.form-input option,
 select.form-select option {
-  background: #1A1D24;
-  color: #FFFFFF;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
 }
 
 .form-input:focus {
-  border-color: var(--va-acc);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  background: var(--md-sys-color-surface-container-low);
 }
 
 .form-input::placeholder {
-  color: var(--va-t3);
+  color: var(--md-sys-color-outline);
 }
 
 .form-hint {
-  font-size: 0.75rem;
-  color: var(--va-t3);
+  font-size: 0.76rem;
+  color: var(--md-sys-color-on-surface-variant);
   line-height: 1.4;
 }
 
 .modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--va-line);
+  padding: 1rem 1.5rem 1.35rem 1.5rem;
+  border-top: 1px solid rgba(64, 73, 66, 0.45);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.75rem;
-  background: rgba(20, 22, 26, 0.5);
+  gap: 0.65rem;
+  background: var(--md-sys-color-surface-container-high);
 }
 
 #btnAddSourceImportOpml {
   margin-right: auto;
 }
 
-/* Kinnituse modaalaken */
+/* Kinnituse modaalaken (M3 Confirmation Dialog) */
 .modal-dialog-confirm {
   max-width: 440px;
 }
@@ -1588,16 +1685,16 @@ select.form-select option {
 .confirm-icon-wrap {
   display: flex;
   align-items: flex-start;
-  gap: 1.15rem;
+  gap: 1.1rem;
 }
 
 .confirm-danger-badge {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: var(--va-down-soft);
-  color: var(--va-down);
-  border: 1px solid rgba(239, 95, 107, 0.3);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1610,7 +1707,7 @@ select.form-select option {
 
 .confirm-text {
   font-size: 0.95rem;
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
   line-height: 1.45;
 }
 
@@ -1621,8 +1718,8 @@ select.form-select option {
 }
 
 .confirm-subtext {
-  font-size: 0.8rem;
-  color: var(--va-t3);
+  font-size: 0.82rem;
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: 0.4rem;
   line-height: 1.4;
 }
@@ -1633,32 +1730,35 @@ select.form-select option {
 .nav-item-right {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  /* Loendurist eemale */
+  gap: 0.55rem;
   flex-shrink: 0;
 }
 
 .nav-item-actions {
   display: flex;
   align-items: center;
-  gap: 0.05rem;
-  /* Nupud üksteisele lähemale */
+  gap: 0.1rem;
 }
 
 .btn-edit-source,
 .btn-delete-source {
   background: transparent;
   border: none;
-  color: var(--va-t3);
+  color: var(--md-sys-color-on-surface-variant);
   padding: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.nav-item.active .btn-edit-source,
+.nav-item.active .btn-delete-source {
+  color: var(--md-sys-color-on-primary-container);
 }
 
 .btn-edit-source:hover {
@@ -1667,24 +1767,24 @@ select.form-select option {
 }
 
 .btn-delete-source:hover {
-  color: var(--va-down);
-  background: var(--va-down-soft);
+  color: var(--md-sys-color-error);
+  background: rgba(147, 0, 10, 0.45);
 }
 
 /* ==========================================================================
-   Kerimise nool üles (Scroll to Top FAB)
+   M3 Floating Action Button (Kerimise nool üles - Scroll to Top FAB)
    ========================================================================== */
 .btn-scroll-top {
   position: fixed;
   bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   right: calc(1.5rem + env(safe-area-inset-right, 0px));
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--va-surface);
-  border: 1px solid var(--va-line-highlight);
-  color: var(--va-t1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-primary-container);
+  border: none;
+  color: var(--md-sys-color-on-primary-container);
+  box-shadow: var(--md-sys-elevation-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1692,7 +1792,7 @@ select.form-select option {
   z-index: 250;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: opacity 0.2s var(--md-sys-motion-standard), background-color 0.18s var(--md-sys-motion-standard), box-shadow 0.18s var(--md-sys-motion-standard), transform 0.18s var(--md-sys-motion-standard);
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1703,17 +1803,17 @@ select.form-select option {
 }
 
 .btn-scroll-top:hover {
-  background: var(--va-surface);
-  border-color: var(--va-acc);
-  color: var(--va-acc);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: var(--md-sys-elevation-4);
 }
 
 /* ==========================================================================
-   Toast / Teavitused
+   M3 Snackbar / Teavitused (Toasts)
    ========================================================================== */
 .toast-container {
   position: fixed;
-  bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
   right: calc(1.5rem + env(safe-area-inset-right, 0px));
   z-index: 300;
   display: flex;
@@ -1723,19 +1823,20 @@ select.form-select option {
 }
 
 .toast {
-  background: var(--va-surface);
-  border: 1px solid var(--va-line-highlight);
-  color: #FFFFFF;
-  padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--va-shadow);
-  font-size: 0.85rem;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid rgba(138, 147, 139, 0.22);
+  color: var(--md-sys-color-on-surface);
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--md-sys-shape-corner-medium);
+  box-shadow: var(--md-sys-elevation-3);
+  font-size: 0.875rem;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
   transform: translateY(20px);
   opacity: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s var(--md-sys-motion-standard);
   pointer-events: auto;
 }
 
@@ -1745,22 +1846,40 @@ select.form-select option {
 }
 
 .toast-success {
-  border-left: 3px solid var(--va-acc);
+  border-left: 4px solid var(--md-sys-color-primary);
+}
+
+.toast-success svg {
+  color: var(--md-sys-color-primary);
 }
 
 .toast-error {
-  border-left: 3px solid var(--va-down);
+  border-left: 4px solid var(--md-sys-color-error);
+}
+
+.toast-error svg {
+  color: var(--md-sys-color-error);
+}
+
+.toast-info {
+  border-left: 4px solid var(--md-sys-color-tertiary);
+}
+
+.toast-info svg {
+  color: var(--md-sys-color-tertiary);
 }
 
 /* ==========================================================================
-   Responsiivsus (Mobiilne vaade)
+   Responsiivsus (Mobiilne M3 vaade)
    ========================================================================== */
 
 @media (max-width: 900px) {
+  /* M3 Modal Navigation Drawer */
   .sidebar {
     width: var(--sidebar-width) !important;
     transform: translateX(-100%);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    border-radius: 0 var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0;
+    box-shadow: var(--md-sys-elevation-4);
   }
 
   .sidebar.mobile-open {
@@ -1774,11 +1893,11 @@ select.form-select option {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.65);
     z-index: 90;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s var(--md-sys-motion-standard);
   }
 
   .sidebar-overlay.active {
@@ -1807,11 +1926,11 @@ select.form-select option {
 
   .source-group {
     margin-bottom: 0.5rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--md-sys-shape-corner-large);
   }
 
   .source-group-header {
-    padding: 0.55rem 0.75rem;
+    padding: 0.55rem 0.85rem;
   }
 
   .article-item {
@@ -1819,7 +1938,7 @@ select.form-select option {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0.65rem 0.75rem;
+    padding: 0.65rem 0.85rem;
     gap: 0.75rem;
   }
 
@@ -1835,8 +1954,8 @@ select.form-select option {
   .article-title-link {
     order: unset;
     flex: none;
-    font-size: 0.93rem;
-    line-height: 1.35;
+    font-size: 0.9375rem;
+    line-height: 1.38;
     -webkit-line-clamp: 3;
     line-clamp: 3;
   }
@@ -1850,8 +1969,8 @@ select.form-select option {
   .article-time {
     order: unset;
     margin-right: 0;
-    font-size: 0.7rem;
-    color: var(--va-t2);
+    font-size: 0.72rem;
+    color: var(--md-sys-color-on-surface-variant);
   }
 
   .article-actions {
@@ -1862,8 +1981,8 @@ select.form-select option {
 
   .btn-read-later,
   .btn-mark-read {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
 
   .btn-read-later svg,
@@ -1879,7 +1998,7 @@ select.form-select option {
     margin-left: 0;
     flex-shrink: 0;
     align-self: center;
-    border-radius: 6px;
+    border-radius: var(--md-sys-shape-corner-medium);
   }
 
   .modal-content {
@@ -1894,31 +2013,31 @@ select.form-select option {
 }
 
 /* ==========================================================================
-   Kasutajahaldus ja Autentimine
+   Kasutajahaldus ja Autentimine (M3 Profile & Auth)
    ========================================================================== */
 
-/* Päise kasutaja ringi-kujuline nupp */
+/* Päise kasutaja ringi-kujuline M3 Avatar nupp */
 .btn-user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50% !important;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(53, 141, 77, 0.12);
-  border: 1.5px solid rgba(53, 141, 77, 0.35);
-  color: var(--va-acc);
+  background: var(--md-sys-color-primary-container);
+  border: 1.5px solid rgba(139, 214, 158, 0.35);
+  color: var(--md-sys-color-on-primary-container);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-left: 0.25rem;
+  transition: all 0.2s var(--md-sys-motion-standard);
+  margin-left: 0.2rem;
 }
 
 .btn-user-avatar:hover {
-  background: var(--va-acc);
-  color: var(--va-on-acc);
-  border-color: var(--va-acc);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
 }
 
 .user-avatar-initial {
@@ -1959,16 +2078,16 @@ select.form-select option {
   align-items: center;
   gap: 1.15rem;
   padding-bottom: 1.15rem;
-  border-bottom: 1px solid var(--va-line);
+  border-bottom: 1px solid rgba(64, 73, 66, 0.5);
 }
 
 .user-profile-avatar-large {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: var(--va-acc-soft);
-  border: 2px solid var(--va-acc);
-  color: var(--va-acc);
+  background: var(--md-sys-color-primary-container);
+  border: 2px solid var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1994,10 +2113,10 @@ select.form-select option {
 }
 
 .user-profile-name {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #FFFFFF;
-  letter-spacing: -0.01em;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: 0;
   word-break: break-all;
 }
 
@@ -2007,46 +2126,46 @@ select.form-select option {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.18rem 0.6rem;
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
 .badge-role-admin {
-  background: rgba(223, 161, 78, 0.16);
-  color: var(--va-amber);
-  border: 1px solid rgba(223, 161, 78, 0.35);
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border: none;
 }
 
 .badge-role-user {
-  background: rgba(53, 141, 77, 0.14);
-  color: var(--va-mint);
-  border: 1px solid rgba(53, 141, 77, 0.35);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border: none;
 }
 
 .user-profile-created {
   font-family: var(--va-mono);
-  font-size: 0.72rem;
-  color: var(--va-t3);
+  font-size: 0.74rem;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .user-profile-email-row {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.76rem;
-  color: var(--va-t2);
+  font-size: 0.78rem;
+  color: var(--md-sys-color-on-surface-variant);
   margin-top: 0.15rem;
   flex-wrap: wrap;
 }
 
 .user-profile-email-label {
   font-family: var(--va-mono);
-  color: var(--va-t3);
+  color: var(--md-sys-color-outline);
   font-size: 0.72rem;
 }
 
 .user-profile-email-val {
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
   font-weight: 500;
   max-width: 220px;
   overflow: hidden;
@@ -2056,24 +2175,24 @@ select.form-select option {
 
 .btn-profile-edit-email {
   background: transparent;
-  border: 1px solid var(--va-line);
-  color: var(--va-t2);
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  border: 1px solid rgba(138, 147, 139, 0.3);
+  color: var(--md-sys-color-on-surface-variant);
+  width: 22px;
+  height: 22px;
+  border-radius: var(--md-sys-shape-corner-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
   padding: 0;
   flex-shrink: 0;
 }
 
 .btn-profile-edit-email:hover {
-  color: var(--va-acc);
-  border-color: rgba(53, 141, 77, 0.4);
-  background: var(--va-acc-soft);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: transparent;
+  background: var(--md-sys-color-primary-container);
 }
 
 .user-profile-email-edit-form {
@@ -2085,18 +2204,19 @@ select.form-select option {
 }
 
 .form-input-sm {
-  padding: 0.35rem 0.6rem;
+  padding: 0.35rem 0.65rem;
   font-size: 0.78rem;
-  height: 30px;
+  height: 32px;
   flex: 1;
   min-width: 0;
+  border-radius: var(--md-sys-shape-corner-small);
 }
 
 .btn-sm {
-  padding: 0.35rem 0.65rem;
-  font-size: 0.75rem;
-  height: 30px;
-  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.76rem;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2104,15 +2224,15 @@ select.form-select option {
   flex-shrink: 0;
 }
 
-/* Kasutaja uudisvoogude statistika sektsioon */
+/* Kasutaja uudisvoogude statistika sektsioon (M3 Tonal Surface Card) */
 .user-stats-section {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  padding: 0.85rem;
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--va-line);
+  padding: 0.9rem;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid rgba(64, 73, 66, 0.55);
 }
 
 .user-stats-section-header {
@@ -2122,12 +2242,12 @@ select.form-select option {
 }
 
 .user-stats-section-title {
-  font-family: var(--va-mono);
-  font-size: 0.7rem;
+  font-family: var(--va-sans);
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--va-t3);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .user-stats-grid {
@@ -2140,17 +2260,17 @@ select.form-select option {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  padding: 0.6rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid rgba(138, 147, 139, 0.14);
+  border-radius: var(--md-sys-shape-corner-medium);
   min-width: 0;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s var(--md-sys-motion-standard), background-color 0.15s var(--md-sys-motion-standard);
 }
 
 .user-stat-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--md-sys-color-surface-container-highest);
+  border-color: rgba(138, 147, 139, 0.28);
 }
 
 .user-stat-card-wide {
@@ -2158,11 +2278,11 @@ select.form-select option {
 }
 
 .user-stat-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--va-acc-soft);
-  color: var(--va-acc);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2170,8 +2290,8 @@ select.form-select option {
 }
 
 .user-stat-icon-fav {
-  background: var(--va-amber-soft);
-  color: var(--va-amber);
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
 }
 
 .user-stat-info {
@@ -2183,7 +2303,7 @@ select.form-select option {
 
 .user-stat-label {
   font-size: 0.68rem;
-  color: var(--va-t3);
+  color: var(--md-sys-color-on-surface-variant);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   line-height: 1.1;
@@ -2196,7 +2316,7 @@ select.form-select option {
   font-family: var(--va-mono);
   font-size: 0.95rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--md-sys-color-on-surface);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -2213,7 +2333,7 @@ select.form-select option {
 .user-stat-sub {
   font-family: var(--va-mono);
   font-size: 0.72rem;
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -2244,7 +2364,7 @@ select.form-select option {
   display: block;
   font-size: 0.88rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--md-sys-color-on-surface);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2287,7 +2407,7 @@ select.form-select option {
 .user-stat-source-count {
   font-family: var(--va-mono);
   font-size: 0.72rem;
-  color: var(--va-t3);
+  color: var(--md-sys-color-on-surface-variant);
   flex-shrink: 0;
 }
 
@@ -2297,16 +2417,16 @@ select.form-select option {
   flex-direction: column;
   gap: 0.55rem;
   padding: 0.75rem 0.85rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-sm);
-  transition: all 0.25s ease;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid rgba(138, 147, 139, 0.14);
+  border-radius: var(--md-sys-shape-corner-medium);
+  transition: all 0.25s var(--md-sys-motion-standard);
   --mob-pct: 50%;
 }
 
 .user-device-usage-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--md-sys-color-surface-container-highest);
+  border-color: rgba(138, 147, 139, 0.28);
 }
 
 .user-device-usage-header {
@@ -2320,30 +2440,30 @@ select.form-select option {
   align-items: center;
   gap: 0.45rem;
   font-size: 0.78rem;
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
 }
 
 .device-stat-side .device-icon {
   flex-shrink: 0;
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
 }
 
 .device-stat-side .device-name {
   font-weight: 500;
-  color: var(--va-t1);
+  color: var(--md-sys-color-on-surface);
 }
 
 .device-stat-side .device-percent {
   font-family: var(--va-mono);
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
 }
 
 .user-device-bar-track {
   height: 8px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
+  border-radius: var(--md-sys-shape-corner-full);
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -2351,15 +2471,11 @@ select.form-select option {
   transition: background 0.45s ease, box-shadow 0.45s ease;
 }
 
-.user-device-bar-segment {
-  display: none;
-}
-
 /* Sujuv värvide üleminek ribal (kui mobiil juhib) */
 .user-device-usage-card.dominant-mobile .user-device-bar-track {
   background: linear-gradient(
     90deg,
-    var(--va-acc) 0%,
+    var(--md-sys-color-primary-seed) 0%,
     rgba(53, 141, 77, 0.85) calc(var(--mob-pct, 50%) - 20%),
     rgba(53, 141, 77, 0.45) var(--mob-pct, 50%),
     rgba(53, 141, 77, 0.16) calc(var(--mob-pct, 50%) + 18%),
@@ -2378,7 +2494,7 @@ select.form-select option {
     rgba(53, 141, 77, 0.16) calc(var(--mob-pct, 50%) - 18%),
     rgba(53, 141, 77, 0.45) var(--mob-pct, 50%),
     rgba(53, 141, 77, 0.85) calc(var(--mob-pct, 50%) + 20%),
-    var(--va-acc) 100%
+    var(--md-sys-color-primary-seed) 100%
   );
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 5px rgba(53, 141, 77, 0.12);
 }
@@ -2388,7 +2504,7 @@ select.form-select option {
   background: linear-gradient(
     90deg,
     rgba(53, 141, 77, 0.7) 0%,
-    var(--va-acc) 50%,
+    var(--md-sys-color-primary-seed) 50%,
     rgba(53, 141, 77, 0.7) 100%
   );
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 5px rgba(53, 141, 77, 0.10);
@@ -2418,12 +2534,12 @@ select.form-select option {
   padding: 0.65rem 0.25rem;
   font-size: 0.81rem;
   font-weight: 500;
-  border-radius: var(--radius-sm);
+  border-radius: var(--md-sys-shape-corner-full);
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
   line-height: 1.2;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .user-actions-row .btn-user-action span {
@@ -2464,23 +2580,23 @@ select.form-select option {
   padding: 0.75rem 1rem;
   font-size: 0.88rem;
   font-weight: 500;
-  border-radius: var(--radius-sm);
+  border-radius: var(--md-sys-shape-corner-full);
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .btn-user-action.btn-admin-locked {
-  background: rgba(223, 161, 78, 0.10);
-  color: var(--va-amber);
-  border: 1px solid rgba(223, 161, 78, 0.28);
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  border: none;
   cursor: default;
   pointer-events: none;
   user-select: none;
 }
 
 .btn-user-action.btn-admin-locked svg {
-  color: var(--va-amber);
-  stroke: var(--va-amber);
+  color: var(--md-sys-color-on-tertiary-container);
+  stroke: var(--md-sys-color-on-tertiary-container);
 }
 
 .user-action-divider {
@@ -2494,28 +2610,28 @@ select.form-select option {
   align-items: center;
   gap: 0.65rem;
   padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  background: rgba(223, 161, 78, 0.09);
-  border: 1px solid rgba(223, 161, 78, 0.25);
-  color: var(--va-amber);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: rgba(99, 63, 0, 0.35);
+  border: 1px solid rgba(255, 185, 81, 0.3);
+  color: var(--md-sys-color-on-tertiary-container);
   font-size: 0.8rem;
   line-height: 1.4;
 }
 
 .admin-notice-box svg {
   flex-shrink: 0;
-  color: var(--va-amber);
+  color: var(--md-sys-color-tertiary);
 }
 
 /* ==========================================================================
-   Autentimise täisekraani kiht (Auth Overlay & Cards)
+   Autentimise täisekraani kiht (M3 Auth Overlay & Segmented Tabs)
    ========================================================================== */
 
 .auth-overlay {
   position: fixed;
   inset: 0;
   z-index: 500;
-  background: var(--va-bg);
+  background: var(--md-sys-color-background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2530,12 +2646,12 @@ body.not-authenticated .app-container {
 
 .auth-card {
   width: 100%;
-  max-width: 410px;
-  background: var(--va-surface);
-  border: 1px solid var(--va-line);
-  border-radius: var(--radius-lg);
+  max-width: 416px;
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid rgba(138, 147, 139, 0.16);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   padding: 2.25rem 2rem;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--md-sys-elevation-3);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -2563,93 +2679,95 @@ body.not-authenticated .app-container {
 }
 
 .auth-title {
-  font-size: 1.55rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #FFFFFF;
+  font-size: 1.65rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--md-sys-color-on-surface);
 }
 
 .auth-subtitle {
-  font-size: 0.82rem;
-  color: var(--va-t2);
+  font-size: 0.84rem;
+  color: var(--md-sys-color-on-surface-variant);
   line-height: 1.4;
 }
 
+/* M3 Segmented Button Tabs */
 .auth-tabs {
   display: flex;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--radius-sm);
+  background: var(--md-sys-color-surface-container-lowest);
+  border-radius: var(--md-sys-shape-corner-full);
   padding: 4px;
-  border: 1px solid var(--va-line);
+  border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .auth-tab {
   flex: 1;
   padding: 0.55rem 0.75rem;
   font-family: var(--va-sans);
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
   border: none;
   background: transparent;
-  color: var(--va-t2);
-  border-radius: 6px;
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.2s var(--md-sys-motion-standard);
 }
 
 .auth-tab:hover {
-  color: #FFFFFF;
+  color: var(--md-sys-color-on-surface);
 }
 
 .auth-tab.active {
-  background: var(--va-surface);
-  color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-weight: 600;
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .auth-error-banner,
 .modal-error-banner {
-  padding: 0.75rem 0.95rem;
-  background: var(--va-down-soft);
-  border: 1px solid rgba(239, 95, 107, 0.4);
-  border-radius: var(--radius-sm);
-  color: #FFB3BA;
+  padding: 0.75rem 1rem;
+  background: var(--md-sys-color-error-container);
+  border: 1px solid rgba(255, 180, 171, 0.3);
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-error-container);
   font-size: 0.82rem;
   line-height: 1.4;
   text-align: left;
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  animation: fieldErrorSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fieldErrorSlide 0.2s var(--md-sys-motion-standard);
   margin-bottom: 0.85rem;
 }
 
 .auth-error-banner svg,
 .modal-error-banner svg {
   flex-shrink: 0;
-  color: var(--va-down);
+  color: var(--md-sys-color-error);
 }
 
 .form-input.is-invalid {
-  border-color: var(--va-down) !important;
-  background: rgba(239, 95, 107, 0.08) !important;
-  box-shadow: 0 0 0 2px rgba(239, 95, 107, 0.22);
+  border-color: var(--md-sys-color-error) !important;
+  background: rgba(147, 0, 10, 0.22) !important;
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-error);
 }
 
 .field-error-msg {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  color: #FF8A95;
+  color: var(--md-sys-color-error);
   font-size: 0.76rem;
   font-weight: 500;
   margin-top: 0.2rem;
-  animation: fieldErrorSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fieldErrorSlide 0.2s var(--md-sys-motion-standard);
 }
 
 .field-error-msg svg {
   flex-shrink: 0;
-  color: var(--va-down);
+  color: var(--md-sys-color-error);
 }
 
 @keyframes fieldErrorSlide {
@@ -2673,12 +2791,12 @@ body.not-authenticated .app-container {
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
-  padding: 0.65rem 0.8rem;
-  background: rgba(111, 155, 245, 0.08);
-  border: 1px solid rgba(111, 155, 245, 0.22);
-  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.85rem;
+  background: var(--va-blue-soft);
+  border: 1px solid rgba(168, 199, 250, 0.25);
+  border-radius: var(--md-sys-shape-corner-medium);
   color: var(--va-blue);
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
@@ -2689,14 +2807,14 @@ body.not-authenticated .app-container {
 
 .btn-auth-submit {
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.8rem 1.25rem;
+  font-size: 0.92rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--md-sys-shape-corner-full);
   margin-top: 0.3rem;
 }
 
@@ -2715,19 +2833,20 @@ body.not-authenticated .app-container {
 .btn-auth-link {
   background: transparent;
   border: none;
-  color: var(--va-t2);
+  color: var(--md-sys-color-primary);
   font-family: var(--va-sans);
   font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
   padding: 0;
-  transition: color 0.15s ease;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  transition: color 0.15s var(--md-sys-motion-standard);
+  text-decoration: none;
 }
 
 .btn-auth-link:hover {
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .auth-form-header {
@@ -2736,16 +2855,16 @@ body.not-authenticated .app-container {
 }
 
 .auth-form-title {
-  font-size: 1.22rem;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
   margin: 0 0 0.35rem 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .auth-form-desc {
-  font-size: 0.82rem;
-  color: var(--va-t2);
+  font-size: 0.84rem;
+  color: var(--md-sys-color-on-surface-variant);
   line-height: 1.45;
   margin: 0;
 }
@@ -2759,41 +2878,41 @@ body.not-authenticated .app-container {
 .btn-auth-back-link {
   background: transparent;
   border: none;
-  color: var(--va-t2);
+  color: var(--md-sys-color-on-surface-variant);
   font-family: var(--va-sans);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
   cursor: pointer;
-  padding: 0.45rem 0.75rem;
-  border-radius: var(--radius-sm);
-  transition: all 0.15s ease;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--md-sys-shape-corner-full);
+  transition: all 0.15s var(--md-sys-motion-standard);
 }
 
 .btn-auth-back-link:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-state-hover);
 }
 
 .auth-success-banner {
-  padding: 0.75rem 0.95rem;
-  background: var(--va-acc-soft);
-  border: 1px solid rgba(53, 141, 77, 0.4);
-  border-radius: var(--radius-sm);
-  color: var(--va-mint);
+  padding: 0.75rem 1rem;
+  background: var(--md-sys-color-primary-container);
+  border: 1px solid rgba(139, 214, 158, 0.35);
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-primary-container);
   font-size: 0.82rem;
   line-height: 1.4;
   text-align: left;
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  animation: fieldErrorSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fieldErrorSlide 0.2s var(--md-sys-motion-standard);
   margin-bottom: 0.85rem;
 }
 
 .auth-success-banner svg {
   flex-shrink: 0;
-  color: var(--va-acc);
+  color: var(--md-sys-color-primary);
 }

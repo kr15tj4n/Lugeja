@@ -34,8 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM elemendid
   const sourcesListEl = document.getElementById('sourcesList');
   const feedContainerEl = document.getElementById('feedContainer');
-  const currentViewTitleEl = document.getElementById('currentViewTitle');
-  const currentViewCountEl = document.getElementById('currentViewCount');
   const totalUnreadBadgeEl = document.getElementById('totalUnreadBadge');
   const navItemReadLater = document.getElementById('navItemReadLater');
   const readLaterBadgeEl = document.getElementById('readLaterBadge');
@@ -43,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshIcon = document.getElementById('refreshIcon');
   const btnMarkAllRead = document.getElementById('btnMarkAllRead');
   const btnToggleRead = document.getElementById('btnToggleRead');
-  const statusIndicatorEl = document.getElementById('statusIndicator');
   const btnScrollTop = document.getElementById('btnScrollTop');
 
   // Rippmenüü ("Lisa")
@@ -133,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddSourceImportOpml = document.getElementById('btnAddSourceImportOpml');
   const opmlFileInput = document.getElementById('opmlFileInput');
   const btnLogout = document.getElementById('btnLogout');
-  const adminProtectedNotice = document.getElementById('adminProtectedNotice');
   const btnOpenDeleteAccountModal = document.getElementById('btnOpenDeleteAccountModal');
 
   // Kasutaja statistika elemendid
@@ -150,8 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const deviceBarTrack = document.getElementById('deviceBarTrack');
   const deviceMobilePercent = document.getElementById('deviceMobilePercent');
   const deviceDesktopPercent = document.getElementById('deviceDesktopPercent');
-  const deviceBarSegmentMobile = document.getElementById('deviceBarSegmentMobile');
-  const deviceBarSegmentDesktop = document.getElementById('deviceBarSegmentDesktop');
 
   const USER_ICON_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
   const USER_LARGE_ICON_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
@@ -403,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function checkFeedScrollPosition() {
+  function checkFeedScrollPosition(deepCheck = false) {
     if (document.hidden || document.body.classList.contains('modal-open')) return;
     if (showReadArticles || isReadLaterView) return;
     if (!articlesData || articlesData.length === 0 || feedContainerEl.classList.contains('has-empty-state')) return;
@@ -414,7 +408,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const distanceToBottom = scrollHeight - (scrollY + windowHeight);
 
     // 1. Kas uudisvoo kerimine on jõudnud lõppu?
-    const isAtBottom = scrollHeight > windowHeight && (distanceToBottom <= 100 || (distanceToBottom <= windowHeight * 0.8 && feedContainerEl.querySelectorAll('.article-item:not(.is-read)').length === 0));
+    const isAtBottom = scrollHeight > windowHeight && (
+      distanceToBottom <= 100 ||
+      (deepCheck && distanceToBottom <= windowHeight * 0.8 && feedContainerEl.querySelectorAll('.article-item:not(.is-read)').length === 0)
+    );
 
     if (isAtBottom) {
       if (!feedReachedEnd) {
@@ -598,11 +595,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lisakontroll kerimisel: kiirel kerimisel debounce'ime loetuks märkimise, et kerimine oleks 100% sujuv
   window.addEventListener('scroll', () => {
     updateScrollTopButton();
-    checkFeedScrollPosition();
+    checkFeedScrollPosition(false);
     clearTimeout(scrollCheckTimeout);
     scrollCheckTimeout = setTimeout(() => {
       checkScrolledPastArticles();
-      checkFeedScrollPosition();
+      checkFeedScrollPosition(true);
     }, 120);
   }, { passive: true });
 
@@ -729,12 +726,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (src) {
       src.unread_count = (src.unread_count || 0) + 1;
     }
-
-    // Praeguse vaate loendur kui eksisteerib
-    if (currentViewCountEl && !isReadLaterView) {
-      let viewCount = parseInt(currentViewCountEl.textContent, 10) || 0;
-      currentViewCountEl.textContent = `${viewCount + 1} lugemata`;
-    }
   }
 
   function decrementUnreadCounts(sourceId) {
@@ -795,14 +786,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Uuenda ka sourcesData mälus
     if (src && src.unread_count > 0) {
       src.unread_count--;
-    }
-
-    // Praeguse vaate loendur kui eksisteerib
-    if (currentViewCountEl && !isReadLaterView) {
-      let viewCount = parseInt(currentViewCountEl.textContent, 10) || 0;
-      if (viewCount > 0) {
-        currentViewCountEl.textContent = `${viewCount - 1} lugemata`;
-      }
     }
   }
 
@@ -976,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnRetry.addEventListener('click', async () => {
           btnRetry.disabled = true;
           btnRetry.innerHTML = `
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite; color: var(--va-acc);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite; color: var(--md-sys-color-primary);">
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
             Laadin...
@@ -1264,12 +1247,6 @@ document.addEventListener('DOMContentLoaded', () => {
       navItemAll.title = `Kõik allikad (${totalUnread} lugemata)`;
     }
 
-    const exportWrap = document.querySelector('.sidebar-export-wrap');
-    if (exportWrap) {
-      exportWrap.style.display = sourcesData.length > 0 ? 'block' : 'none';
-    }
-
-    updateHeaderTitle();
     requestAnimationFrame(updateAllSourceMarquees);
     setTimeout(updateAllSourceMarquees, 60);
   }
@@ -1299,49 +1276,6 @@ document.addEventListener('DOMContentLoaded', () => {
         catHeader.classList.remove('active');
       }
     });
-
-    updateHeaderTitle();
-  }
-
-  function updateHeaderTitle() {
-    if (!currentViewTitleEl) return;
-    if (isReadLaterView) {
-      currentViewTitleEl.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-        </svg>
-        Loe hiljem
-      `;
-    } else if (currentCategoryId !== null) {
-      const cat = categoriesData.find((c) => c.id === currentCategoryId);
-      const name = cat ? cat.name : 'Kategooria';
-      currentViewTitleEl.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-        </svg>
-        ${escapeHtml(name)}
-      `;
-    } else if (currentSourceId === null) {
-      currentViewTitleEl.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 11a9 9 0 0 1 9 9"></path>
-          <path d="M4 4a16 16 0 0 1 16 16"></path>
-          <circle cx="5" cy="19" r="1"></circle>
-        </svg>
-        Kõik uudised
-      `;
-    } else {
-      const src = sourcesData.find((s) => s.id === currentSourceId);
-      const name = src ? src.name : 'Allikas';
-      currentViewTitleEl.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 11a9 9 0 0 1 9 9"></path>
-          <path d="M4 4a16 16 0 0 1 16 16"></path>
-          <circle cx="5" cy="19" r="1"></circle>
-        </svg>
-        ${escapeHtml(name)}
-      `;
-    }
   }
 
   function renderFeed() {
@@ -1371,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="empty-desc">${emptyDesc}</div>
           ${hasNoSources 
             ? '<button class="btn btn-primary" id="btnEmptyAddSource" style="margin-top: 14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Lisa allikas</button>' 
-            : (!isReadLaterView ? '<button class="btn btn-secondary" id="btnEmptyRefresh" style="margin-top: 14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--va-acc);"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Värskenda kohe</button>' : '')}
+            : (!isReadLaterView ? '<button class="btn btn-secondary" id="btnEmptyRefresh" style="margin-top: 14px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--md-sys-color-primary);"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> Värskenda kohe</button>' : '')}
         </div>
       `;
       const btnEmptyAddSource = feedContainerEl.querySelector('#btnEmptyAddSource');
@@ -1386,7 +1320,7 @@ document.addEventListener('DOMContentLoaded', () => {
           btnEmptyRefresh.disabled = true;
           const origHtml = btnEmptyRefresh.innerHTML;
           btnEmptyRefresh.innerHTML = `
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite; color: var(--va-acc);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite; color: var(--md-sys-color-primary);">
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
             Sünkroonin...
@@ -1401,21 +1335,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       }
-      if (currentViewCountEl) currentViewCountEl.textContent = isReadLaterView ? '0 salvestatud' : '0 lugemata';
       updateScrollTopButton();
       return;
     }
 
     feedContainerEl.classList.remove('has-empty-state');
     document.body.classList.remove('has-empty-feed');
-
-    // Loendur päises kui eksisteerib
-    if (isReadLaterView) {
-      if (currentViewCountEl) currentViewCountEl.textContent = `${articlesData.length} salvestatud`;
-    } else {
-      const unreadCount = articlesData.filter((a) => !a.is_read).length;
-      if (currentViewCountEl) currentViewCountEl.textContent = `${unreadCount} lugemata`;
-    }
 
     // Grupeerime artiklid allikate kaupa vastavalt spetsifikatsioonile:
     // "sorteerituna kõigepealt andmeallikate kaupa ja nende lõikes kuupäeva ja kellaaja järgi"
@@ -1517,7 +1442,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           ${hasThumb ? `
             <a class="article-thumb-link" href="${escapeHtml(safeArtUrl)}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true" title="${escapeHtml(art.title)}">
-              <img class="article-thumb" src="${escapeHtml(safeImgUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('.article-thumb-link').style.display='none'">
+              <img class="article-thumb" src="${escapeHtml(safeImgUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">
             </a>
           ` : ''}
         `;
@@ -1540,6 +1465,12 @@ document.addEventListener('DOMContentLoaded', () => {
         titleLink.addEventListener('click', onArticleClick);
         if (thumbLink) {
           thumbLink.addEventListener('click', onArticleClick);
+          const thumbImg = thumbLink.querySelector('.article-thumb');
+          if (thumbImg) {
+            thumbImg.addEventListener('error', () => {
+              thumbLink.style.display = 'none';
+            });
+          }
         }
 
         listEl.appendChild(artEl);
@@ -1678,8 +1609,6 @@ document.addEventListener('DOMContentLoaded', () => {
         articlesData = articlesData.filter(a => a.id !== numId);
         if (feedContainerEl.children.length === 0) {
           renderFeed();
-        } else if (currentViewCountEl) {
-          currentViewCountEl.textContent = `${articlesData.length} salvestatud`;
         }
       }, 250);
     }
@@ -1708,10 +1637,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isUpdating) return;
     isUpdating = true;
 
-    if (statusIndicatorEl) {
-      statusIndicatorEl.innerHTML = `<span class="status-dot updating"></span> Sünkroonin...`;
-    }
-
     try {
       await Promise.all([loadCategories(), loadSources()]);
       await loadArticles({ scrollToTop });
@@ -1729,9 +1654,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } finally {
       isUpdating = false;
-      if (statusIndicatorEl) {
-        statusIndicatorEl.innerHTML = `<span class="status-dot"></span> Reaalajas`;
-      }
     }
   }
 
@@ -1745,11 +1667,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isUpdating) return;
     isUpdating = true;
 
-    refreshIcon.style.animation = 'spin 0.8s linear infinite';
     btnRefresh.classList.add('loading');
-    if (statusIndicatorEl) {
-      statusIndicatorEl.innerHTML = `<span class="status-dot updating"></span> Uuendan...`;
-    }
 
     try {
       let refreshUrl = '/api/refresh';
@@ -1814,11 +1732,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(err.message || 'Uuendamine ebaõnnestus', 'error');
     } finally {
       isUpdating = false;
-      refreshIcon.style.animation = 'none';
       btnRefresh.classList.remove('loading');
-      if (statusIndicatorEl) {
-        statusIndicatorEl.innerHTML = `<span class="status-dot"></span> Reaalajas`;
-      }
     }
   }
 
@@ -2024,7 +1938,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Automaatne jälgimine MutationObserver abil
-  const modalScrollObserver = new MutationObserver(() => {
+  const modalScrollObserver = new MutationObserver((mutations) => {
+    mutations.forEach((m) => {
+      if (m.target.classList && m.target.classList.contains('modal-backdrop')) {
+        const isOpen = m.target.classList.contains('open');
+        m.target.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      }
+    });
     updateModalScrollLock();
   });
 
@@ -2421,9 +2341,6 @@ document.addEventListener('DOMContentLoaded', () => {
           closeEditCategoryModal();
           await loadCategories();
           await loadSources();
-          if (currentCategoryId === parseInt(id, 10)) {
-            updateHeaderTitle();
-          }
         }
       } catch (err) {
         console.error('Viga kategooria uuendamisel:', err);
@@ -2947,7 +2864,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (userProfileEmailVal) {
           userProfileEmailVal.textContent = data.email || 'Määramata';
-          userProfileEmailVal.style.color = data.email ? 'var(--va-t1)' : 'var(--va-t3)';
+          userProfileEmailVal.style.color = data.email ? 'var(--md-sys-color-on-surface)' : 'var(--md-sys-color-outline)';
         }
         profileEmailEditForm.style.display = 'none';
         showToast('E-posti aadress edukalt salvestatud!');
@@ -3098,17 +3015,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (userProfileEmailVal) {
       userProfileEmailVal.textContent = currentUser.email || 'Määramata';
-      userProfileEmailVal.style.color = currentUser.email ? 'var(--va-t1)' : 'var(--va-t3)';
+      userProfileEmailVal.style.color = currentUser.email ? 'var(--md-sys-color-on-surface)' : 'var(--md-sys-color-outline)';
     }
     if (profileEmailInput) {
       profileEmailInput.value = currentUser.email || '';
     }
     if (profileEmailEditForm) {
       profileEmailEditForm.style.display = 'none';
-    }
-
-    if (adminProtectedNotice) {
-      adminProtectedNotice.style.display = 'none';
     }
 
     if (btnOpenDeleteAccountModal) {
@@ -3307,38 +3220,40 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!rowEl || !nameEl) return;
     const text = nameEl.textContent ? nameEl.textContent.trim() : '';
     if (!text || text === '-' || text === '') {
-      rowEl.classList.remove('is-scrolling');
-      rowEl.style.removeProperty('--marquee-distance');
-      rowEl.style.removeProperty('--marquee-duration');
+      if (rowEl.classList.contains('is-scrolling')) {
+        rowEl.classList.remove('is-scrolling');
+        rowEl.style.removeProperty('--marquee-distance');
+        rowEl.style.removeProperty('--marquee-duration');
+      }
       return;
     }
 
-    rowEl.classList.remove('is-scrolling');
-    nameEl.style.display = 'inline-block';
-    nameEl.style.width = 'max-content';
-    nameEl.style.maxWidth = 'none';
+    const containerWidth = rowEl.clientWidth;
+    if (containerWidth <= 0) return;
 
     const fullWidth = nameEl.scrollWidth;
-    const containerWidth = rowEl.clientWidth;
-
-    nameEl.style.display = '';
-    nameEl.style.width = '';
-    nameEl.style.maxWidth = '';
-
     const overflow = fullWidth - containerWidth;
     if (overflow > 4) {
-      rowEl.classList.add('is-scrolling');
-      rowEl.style.setProperty('--marquee-distance', `-${overflow}px`);
-      const duration = Math.max(5, (overflow / 22) + 3);
-      rowEl.style.setProperty('--marquee-duration', `${duration.toFixed(1)}s`);
+      const distStr = `-${overflow}px`;
+      const durationStr = `${Math.max(5, (overflow / 22) + 3).toFixed(1)}s`;
+      if (rowEl.style.getPropertyValue('--marquee-distance') !== distStr) {
+        rowEl.style.setProperty('--marquee-distance', distStr);
+        rowEl.style.setProperty('--marquee-duration', durationStr);
+      }
+      if (!rowEl.classList.contains('is-scrolling')) {
+        rowEl.classList.add('is-scrolling');
+      }
     } else {
-      rowEl.classList.remove('is-scrolling');
-      rowEl.style.removeProperty('--marquee-distance');
-      rowEl.style.removeProperty('--marquee-duration');
+      if (rowEl.classList.contains('is-scrolling')) {
+        rowEl.classList.remove('is-scrolling');
+        rowEl.style.removeProperty('--marquee-distance');
+        rowEl.style.removeProperty('--marquee-duration');
+      }
     }
   }
 
   function updateAllStatMarquees() {
+    if (!userProfileModal || !userProfileModal.classList.contains('open')) return;
     updateStatSourceMarquee(statMostActiveSourceRow, statMostActiveSourceName);
     updateStatSourceMarquee(statFavoriteSourceRow, statFavoriteSourceName);
   }
@@ -3407,25 +3322,6 @@ document.addEventListener('DOMContentLoaded', () => {
           userDeviceUsageCard.classList.add('dominant-desktop');
         } else {
           userDeviceUsageCard.classList.add('dominant-equal');
-        }
-
-        // Tagame ülimalt sujuva ja loomuliku värvide ülemineku ribal
-        if (deviceBarTrack) {
-          if (ds.dominant === 'mobile') {
-            const p1 = Math.max(0, mobPct - 20);
-            const p2 = mobPct;
-            const p3 = Math.min(100, mobPct + 18);
-            const p4 = Math.min(100, mobPct + 35);
-            deviceBarTrack.style.background = `linear-gradient(90deg, #358D4D 0%, rgba(53, 141, 77, 0.85) ${p1}%, rgba(53, 141, 77, 0.45) ${p2}%, rgba(53, 141, 77, 0.16) ${p3}%, rgba(255, 255, 255, 0.07) ${p4}%, rgba(255, 255, 255, 0.06) 100%)`;
-          } else if (ds.dominant === 'desktop') {
-            const p1 = Math.max(0, mobPct - 35);
-            const p2 = Math.max(0, mobPct - 18);
-            const p3 = mobPct;
-            const p4 = Math.min(100, mobPct + 20);
-            deviceBarTrack.style.background = `linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.07) ${p1}%, rgba(53, 141, 77, 0.16) ${p2}%, rgba(53, 141, 77, 0.45) ${p3}%, rgba(53, 141, 77, 0.85) ${p4}%, #358D4D 100%)`;
-          } else {
-            deviceBarTrack.style.background = `linear-gradient(90deg, rgba(53, 141, 77, 0.7) 0%, #358D4D 50%, rgba(53, 141, 77, 0.7) 100%)`;
-          }
         }
       }
     } catch (e) {
@@ -3809,13 +3705,6 @@ document.addEventListener('DOMContentLoaded', () => {
     syncFeedFromDb({ showFeedback: false });
   }, 5 * 60 * 1000);
 
-  // CSS animatsioonipöörlemine
-  const style = document.createElement('style');
-  style.innerHTML = `
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-  `;
-  document.head.appendChild(style);
-
   // ==========================================================================
   // Progressive Web App (PWA) ja Service Worker
   // ==========================================================================
@@ -3871,9 +3760,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Võrguühendus taastatud!', 'success');
       wasOffline = false;
     }
-    if (statusIndicatorEl) {
-      statusIndicatorEl.innerHTML = `<span class="status-dot"></span> Sünkroonis`;
-    }
     // Ära kutsu siin handleRefresh(), sest mobiilis tekitab see äppide vahetamisel
     // pooleli oleva uudisvoo ootamatu tühjendamise ja kerimishüppeid!
   });
@@ -3881,9 +3767,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('offline', () => {
     wasOffline = true;
     showToast('Oled võrguühenduseta. Kuvatakse salvestatud uudiseid.', 'error');
-    if (statusIndicatorEl) {
-      statusIndicatorEl.innerHTML = `<span class="status-dot updating" style="background:#F59E0B;"></span> Offline`;
-    }
   });
 
   // Algne käivitus (kontrolli esmalt autentimist)
